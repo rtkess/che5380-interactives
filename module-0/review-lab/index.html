@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>CHE 5380 Module 0 Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: Baylor-green header band with station tabs; one station panel at a time, each a stack of hands-on "bench" blocks. */
+:root{
+  --bg:#F2F5F1; --surface:#FFFFFF; --sunken:#E9EEE8; --ink:#13201A; --muted:#55655C; --line:#D3DCD4;
+  --accent:#154734; --accent-ink:#154734; --gold:#FFB81C; --gold-soft:#FFF2CF; --gold-ink:#7A5200;
+  --btn:#154734; --btn-ink:#FFFFFF;
+  --good:#1D7A47; --good-bg:#E2F3E8; --bad:#B42318; --bad-bg:#FCE9E7;
+  --band:#154734; --band-ink:#FFFFFF; --band-muted:#BFD3C8;
+  --curve:#154734; --zone:rgba(255,184,28,.22);
+  --f-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-data: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0C1410; --surface:#141F19; --sunken:#1B2921; --ink:#E6EEE8; --muted:#9CB0A4; --line:#2A3B32;
+  --accent:#2F7A57; --accent-ink:#86CDA8; --gold:#FFC23D; --gold-soft:#3A2F12; --gold-ink:#FFD47A;
+  --btn:#1F6A4A; --btn-ink:#FFFFFF;
+  --good:#63D59E; --good-bg:#123122; --bad:#FF8F85; --bad-bg:#3B1714;
+  --band:#0F2E21; --band-ink:#F1F6F2; --band-muted:#9FC0AE;
+  --curve:#86CDA8; --zone:rgba(255,194,61,.16);
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0C1410; --surface:#141F19; --sunken:#1B2921; --ink:#E6EEE8; --muted:#9CB0A4; --line:#2A3B32;
+  --accent:#2F7A57; --accent-ink:#86CDA8; --gold:#FFC23D; --gold-soft:#3A2F12; --gold-ink:#FFD47A;
+  --btn:#1F6A4A; --btn-ink:#FFFFFF;
+  --good:#63D59E; --good-bg:#123122; --bad:#FF8F85; --bad-bg:#3B1714;
+  --band:#0F2E21; --band-ink:#F1F6F2; --band-muted:#9FC0AE;
+  --curve:#86CDA8; --zone:rgba(255,194,61,.16);
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+header.band{background:var(--band);color:var(--band-ink)}
+header.band .wrap{padding-block:22px 0}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--band-muted);font-weight:600}
+h1{font-family:var(--f-display);font-size:clamp(26px,4.2vw,36px);line-height:1.1;margin:6px 0 6px;font-weight:800;letter-spacing:-.015em;text-wrap:balance}
+h1 .pka{color:var(--gold);font-family:var(--f-data);font-weight:600;font-size:.62em;letter-spacing:0;vertical-align:.25em;margin-left:.3em}
+.lede{margin:0 0 16px;color:var(--band-muted);max-width:62ch}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;margin:0 -4px;padding:0 4px}
+nav.tabs button{flex:0 0 auto;border:0;background:transparent;color:var(--band-muted);font:600 14px/1 var(--f-body);padding:12px 14px 13px;border-radius:8px 8px 0 0;cursor:pointer;display:flex;align-items:center;gap:8px}
+nav.tabs button:hover{color:var(--band-ink)}
+nav.tabs button[aria-selected="true"]{background:var(--bg);color:var(--ink)}
+nav.tabs .dot{width:9px;height:9px;border-radius:50%;border:1.5px solid currentColor;opacity:.7}
+nav.tabs .dot.done{background:var(--gold);border-color:var(--gold);opacity:1}
+main .wrap{padding-block:22px 48px}
+section.station{display:grid;gap:18px}
+.st-head{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between}
+h2{font-family:var(--f-display);font-size:24px;line-height:1.2;margin:0;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+.src{font-size:13px;color:var(--muted)}
+.progress{font:600 12px/1 var(--f-data);color:var(--muted);background:var(--sunken);padding:6px 9px;border-radius:999px;white-space:nowrap}
+.progress.done{background:var(--gold-soft);color:var(--gold-ink)}
+.bench{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;min-width:0}
+.bench h3{margin:0;font-size:17px;font-weight:750;font-family:var(--f-display)}
+.bench p{margin:0;max-width:68ch}
+.hint{color:var(--muted);font-size:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{appearance:none;border:1px solid var(--btn);background:var(--btn);color:var(--btn-ink);font:600 14px/1 var(--f-body);padding:10px 14px;border-radius:8px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent-ink);border-color:var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chip{appearance:none;border:1px solid var(--line);background:var(--sunken);color:var(--ink);font:500 14px/1.3 var(--f-body);padding:9px 12px;border-radius:8px;cursor:pointer;text-align:left}
+.chip:hover{border-color:var(--accent-ink)}
+.chip.used{opacity:.35;cursor:default}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.fb{border-radius:8px;padding:10px 12px;font-size:14px}
+.fb.ok{background:var(--good-bg);color:var(--good)}
+.fb.no{background:var(--bad-bg);color:var(--bad)}
+.fb.info{background:var(--gold-soft);color:var(--gold-ink)}
+.fb b{font-weight:700}
+.mono{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+select,input[type="text"],input[type="number"]{font:500 14px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:8px 9px;max-width:100%}
+input[type="range"]{width:100%;accent-color:var(--accent)}
+label.ctl{display:grid;gap:4px;font-size:13px;color:var(--muted);font-weight:600}
+label.ctl .val{font-family:var(--f-data);color:var(--ink);font-weight:600}
+
+/* ordering */
+.slots{display:grid;gap:6px;counter-reset:s}
+.slot{display:flex;gap:10px;align-items:center;min-height:44px;padding:8px 12px;border:1.5px dashed var(--line);border-radius:8px;color:var(--muted);font-size:14px}
+.slot b{font-family:var(--f-data);color:var(--accent-ink);min-width:1.4em}
+.slot.filled{border-style:solid;color:var(--ink);background:var(--sunken)}
+.slot.ok{border-color:var(--good)} .slot.no{border-color:var(--bad)}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+
+/* match + sort tables */
+.tbl{display:grid;gap:8px}
+.tbl .r{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.tbl .r:first-child{border-top:0}
+.tbl .r.ok select,.tbl .r.ok .seg{box-shadow:0 0 0 2px var(--good)}
+.tbl .r.no select,.tbl .r.no .seg{box-shadow:0 0 0 2px var(--bad)}
+@media (max-width:620px){ .tbl .r{grid-template-columns:1fr} }
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--surface);color:var(--ink);font:500 13px var(--f-body);padding:8px 10px;cursor:pointer;border-left:1px solid var(--line)}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+
+/* condensation */
+.rxn{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch}
+.rslot{min-height:70px;border:1.5px dashed var(--line);border-radius:8px;padding:10px;display:grid;align-content:center;gap:2px;font-size:14px}
+.rslot.filled{border-style:solid;background:var(--sunken)}
+.rslot .f{font-family:var(--f-data);font-size:15px}
+.plus{align-self:center;font:700 22px var(--f-data);color:var(--muted)}
+.product{border-radius:var(--r);border:1px solid var(--line);padding:14px;display:grid;gap:6px;background:var(--sunken)}
+.product .name{font:800 20px var(--f-display)}
+.eq{font-family:var(--f-data);font-size:14px;overflow-x:auto;white-space:nowrap;padding-bottom:2px}
+.tag{display:inline-block;font:700 11px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:999px}
+.tag.hi{background:var(--gold);color:#3A2600}
+.tag.lo{background:var(--line);color:var(--ink)}
+.built{display:flex;flex-wrap:wrap;gap:6px}
+.built span{font:600 12px var(--f-body);padding:4px 8px;border-radius:999px;background:var(--sunken);color:var(--muted);border:1px solid var(--line)}
+.built span.got{background:var(--good-bg);color:var(--good);border-color:transparent}
+
+/* energy */
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.readout div{background:var(--sunken);border-radius:8px;padding:10px 12px}
+.readout small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.readout span{font:700 18px var(--f-data);font-variant-numeric:tabular-nums}
+.verdict{font:800 18px var(--f-display);padding:10px 14px;border-radius:8px}
+.verdict.exer{background:var(--good-bg);color:var(--good)}
+.verdict.ender{background:var(--bad-bg);color:var(--bad)}
+.verdict.eqm{background:var(--gold-soft);color:var(--gold-ink)}
+.formula{font-family:var(--f-data);font-size:15px;background:var(--sunken);padding:10px 12px;border-radius:8px;overflow-x:auto;white-space:nowrap}
+
+/* water */
+.hcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px}
+.hcard{border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;gap:8px}
+.hcard .f{font:600 16px var(--f-data)}
+.hcard.ok{border-color:var(--good)} .hcard.no{border-color:var(--bad)}
+.cellbox{background:var(--sunken);border-radius:8px;overflow:hidden}
+svg text{font-family:var(--f-body)}
+.ax{stroke:var(--line);stroke-width:1}
+.axl{fill:var(--muted);font-size:12px}
+.curve{fill:none;stroke:var(--curve);stroke-width:2.5}
+.pkaline{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:5 4}
+.pkalbl{fill:var(--gold-ink);font-size:12px;font-weight:700}
+.zone{fill:var(--zone)}
+.marker{fill:var(--gold);stroke:var(--ink);stroke-width:1.5}
+
+/* blood */
+.phscale{position:relative;height:38px;border-radius:8px;background:linear-gradient(90deg,var(--bad-bg),var(--good-bg) 45%,var(--good-bg) 55%,var(--gold-soft));border:1px solid var(--line)}
+.phscale .needle{position:absolute;top:-4px;bottom:-4px;width:4px;margin-left:-2px;background:var(--ink);border-radius:2px;transition:left .3s}
+.phscale .lab{position:absolute;bottom:4px;font:600 11px var(--f-data);color:var(--muted)}
+.pill{display:inline-block;font:700 13px var(--f-body);padding:6px 10px;border-radius:999px}
+.pill.ok{background:var(--good-bg);color:var(--good)} .pill.no{background:var(--bad-bg);color:var(--bad)} .pill.warn{background:var(--gold-soft);color:var(--gold-ink)}
+
+/* practice */
+.prob{background:var(--sunken);border-radius:8px;padding:14px;display:grid;gap:10px}
+.prob .q{font-size:15px;max-width:70ch}
+.steps{margin:0;padding-left:1.3em;display:grid;gap:4px;font-size:14px}
+.steps li{padding-left:2px}
+.steps .mono{font-size:13.5px}
+
+/* quiz */
+.qcard{display:grid;gap:12px}
+.qmeta{font:600 12px var(--f-data);color:var(--muted)}
+.qtext{font:700 18px/1.35 var(--f-display);max-width:66ch;text-wrap:pretty}
+.opts{display:grid;gap:8px}
+.opt{appearance:none;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 15px/1.4 var(--f-body);padding:12px 14px;border-radius:8px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent-ink)}
+.opt.right{border-color:var(--good);background:var(--good-bg);color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
+.opt:disabled{cursor:default}
+.bar{height:6px;background:var(--sunken);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);transition:width .3s}
+.score{font:800 44px var(--f-display);color:var(--accent-ink)}
+ul.review{margin:0;padding-left:1.2em;display:grid;gap:6px}
+footer{color:var(--muted);font-size:13px;padding-top:6px}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+
+<header class="band">
+  <div class="wrap">
+    <div class="eyebrow">CHE 5380 · Principles of Biochemistry</div>
+    <h1>Module 0 Lab <span class="pka" aria-hidden="true">pH = pKa</span></h1>
+    <p class="lede">Practice the ideas from this module's videos. Work through each station in any order, then finish with the checkpoint. Nothing here is graded or saved.</p>
+    <nav class="tabs" role="tablist" aria-label="Stations" id="tabs"></nav>
+  </div>
+</header>
+
+<main><div class="wrap" id="panels">
+
+<!-- ========== STATION 1 ========== -->
+<section class="station" id="origins" role="tabpanel">
+  <div class="st-head"><h2>Origins of life &amp; cells</h2><span class="progress" data-prog="origins"></span></div>
+  <p class="src">From: Intro to Biochem, Parts 1 and 2</p>
+
+  <div class="bench">
+    <h3>Put prebiotic evolution in order</h3>
+    <p class="hint">Tap the steps in the order the prevailing model proposes.</p>
+    <div class="slots" id="ordSlots"></div>
+    <div class="pool" id="ordPool"></div>
+    <div class="row"><button class="btn" id="ordCheck">Check order</button><button class="btn ghost" id="ordReset">Start over</button></div>
+    <div id="ordFb"></div>
+  </div>
+
+  <div class="bench">
+    <h3>Who proposed it?</h3>
+    <p class="hint">Your instructor asks you to know the name tied to each discovery. Dates aren't needed.</p>
+    <div class="tbl" id="matchTbl"></div>
+    <div class="row"><button class="btn" id="matchCheck">Check matches</button></div>
+    <div id="matchFb"></div>
+  </div>
+
+  <div class="bench">
+    <h3>Sort the cell features</h3>
+    <p class="hint">Where does each feature belong?</p>
+    <div class="tbl" id="sortTbl"></div>
+    <div class="row"><button class="btn" id="sortCheck">Check sorting</button></div>
+    <div id="sortFb"></div>
+  </div>
+</section>
+
+<!-- ========== STATION 2 ========== -->
+<section class="station" id="groups" role="tabpanel" hidden>
+  <div class="st-head"><h2>Condensation builder</h2><span class="progress" data-prog="groups"></span></div>
+  <p class="src">From: Review of Functional Groups</p>
+
+  <div class="bench">
+    <h3>Join two simple groups and lasso out the water</h3>
+    <p class="hint">Pick two reactants. In a condensation reaction they join and release a small molecule, usually H₂O. Tap the same group twice to pair it with itself. Build all nine compound functional groups.</p>
+    <div class="pool" id="reactPool"></div>
+    <div class="rxn">
+      <div class="rslot" id="slotA"><span class="hint">Reactant 1</span></div>
+      <div class="plus" aria-hidden="true">+</div>
+      <div class="rslot" id="slotB"><span class="hint">Reactant 2</span></div>
+    </div>
+    <div class="row"><button class="btn ghost" id="rxnClear">Clear</button></div>
+    <div id="rxnOut"></div>
+    <div><div class="hint" style="margin-bottom:6px">Compound groups built</div><div class="built" id="builtList"></div></div>
+  </div>
+
+  <div class="bench">
+    <h3>Remember</h3>
+    <p>Hydrolysis is the reverse of condensation: water adds across the compound group and gives back the simple groups. Hydrolysis of any <b>anhydride</b> is highly exergonic, which is why anhydrides store chemical energy. Glutamic acid and glutamate are the same molecule in different protonation states.</p>
+  </div>
+</section>
+
+<!-- ========== STATION 3 ========== -->
+<section class="station" id="energy" role="tabpanel" hidden>
+  <div class="st-head"><h2>Free energy</h2><span class="progress" data-prog="energy"></span></div>
+  <p class="src">From: Review of Thermodynamics for Biochem, Parts 1 and 2</p>
+
+  <div class="bench">
+    <h3>Predict first: when is a process spontaneous?</h3>
+    <p class="hint">Use ΔG = ΔH − TΔS. For each sign combination, when is ΔG negative?</p>
+    <div class="tbl" id="signTbl"></div>
+    <div class="row"><button class="btn" id="signCheck">Check predictions</button></div>
+    <div id="signFb"></div>
+  </div>
+
+  <div class="bench">
+    <h3>Test it: ΔG = ΔH − TΔS</h3>
+    <p class="hint">Load a scenario from the videos or set your own values. T must be in kelvin: K = °C + 273.15. ΔS is usually given in J/(mol·K), so divide by 1000 to match kJ.</p>
+    <div class="row" id="presets"></div>
+    <div class="grid2">
+      <label class="ctl">ΔH (kJ/mol) <span class="val" id="dHv"></span><input type="range" id="dH" min="-100" max="100" step="0.01" value="-50"></label>
+      <label class="ctl">ΔS (J/mol·K) <span class="val" id="dSv"></span><input type="range" id="dS" min="-300" max="300" step="0.1" value="-150"></label>
+      <label class="ctl">Temperature (°C) <span class="val" id="Tv"></span><input type="range" id="T" min="-20" max="100" step="1" value="37"></label>
+    </div>
+    <div class="formula" id="gFormula"></div>
+    <div class="verdict" id="gVerdict"></div>
+    <p class="hint" id="gNote"></p>
+  </div>
+
+  <div class="bench">
+    <h3>ΔG depends on concentration</h3>
+    <p class="hint">ΔG = ΔG°′ + RT ln Q and ΔG°′ = −RT ln K′eq. The prime means the biochemical standard state: 1 M reactants and products, 1 atm, 25 °C, and pH 7. R = 8.3145 J/(mol·K), T = 298.15 K.</p>
+    <div class="grid2">
+      <label class="ctl">ΔG°′ (kJ/mol) <span class="val" id="g0v"></span><input type="range" id="g0" min="-30" max="30" step="0.1" value="-10"></label>
+      <label class="ctl">Reaction quotient Q = [products]/[reactants] <span class="val" id="lqv"></span><input type="range" id="lq" min="-6" max="6" step="0.1" value="0"></label>
+    </div>
+    <div class="readout">
+      <div><small>K′eq</small><span id="keq"></span></div>
+      <div><small>ΔG under these conditions</small><span id="gq"></span></div>
+    </div>
+    <div id="qFb"></div>
+    <div class="row"><button class="btn ghost" id="setEq">Set Q = K′eq</button></div>
+  </div>
+</section>
+
+<!-- ========== STATION 4 ========== -->
+<section class="station" id="water" role="tabpanel" hidden>
+  <div class="st-head"><h2>Water</h2><span class="progress" data-prog="water"></span></div>
+  <p class="src">From: Water, Parts 1 and 2</p>
+
+  <div class="bench">
+    <h3>Rank the bonding interactions, strongest first</h3>
+    <p class="hint">You don't need to memorize the values, except that an H bond is about 20 kJ/mol. You do need the order.</p>
+    <div class="slots" id="rankSlots"></div>
+    <div class="pool" id="rankPool"></div>
+    <div class="row"><button class="btn" id="rankCheck">Check ranking</button><button class="btn ghost" id="rankReset">Start over</button></div>
+    <div id="rankFb"></div>
+  </div>
+
+  <div class="bench">
+    <h3>Correct H bond or not?</h3>
+    <p class="hint">An H bond needs an H on an electronegative donor (N, O, F, Cl) and an electronegative acceptor. Never draw one to the H of a C–H.</p>
+    <div class="hcards" id="hcards"></div>
+  </div>
+
+  <div class="bench">
+    <h3>Osmosis: what happens to the cell?</h3>
+    <p class="hint">The solute can't cross the membrane, so water moves toward the side with more solute. Inside the cell is fixed at 300 mOsm/L.</p>
+    <div class="grid2">
+      <label class="ctl">Solute outside the cell (mOsm/L) <span class="val" id="outv"></span><input type="range" id="outC" min="20" max="600" step="10" value="300"></label>
+      <div class="row" style="align-self:end"><span class="hint">Cell type</span>
+        <div class="seg" id="cellType"><button aria-pressed="true" data-v="animal">Animal cell</button><button aria-pressed="false" data-v="wall">Plant / bacterial (cell wall)</button></div>
+      </div>
+    </div>
+    <div class="cellbox"><svg id="cellSvg" viewBox="0 0 600 220" width="100%" role="img" aria-label="Cell in solution"></svg></div>
+    <div id="cellFb"></div>
+  </div>
+</section>
+
+<!-- ========== STATION 5 ========== -->
+<section class="station" id="buffers" role="tabpanel" hidden>
+  <div class="st-head"><h2>Buffer lab</h2><span class="progress" data-prog="buffers"></span></div>
+  <p class="src">From: Buffer Calculations, Parts 1–6 and Buffering in Biological Systems</p>
+
+  <div class="bench">
+    <h3>Titration curve: the HH equation, plotted</h3>
+    <p class="hint">Drag the slider or click the chart to add strong base. At the horizontal inflection point (half an equivalent), [A⁻] = [HA] and pH = pKa. The shaded band is the buffering range, pKa ± 1.</p>
+    <div class="row">
+      <label class="ctl" style="min-width:min(100%,260px)">Weak acid
+        <select id="acidSel">
+          <option value="acetic">Acetic acid (pKa 4.76)</option>
+          <option value="phosphoric">Phosphoric acid, triprotic</option>
+          <option value="carbonic">Carbonic acid / CO₂ (pKa₁ 6.35)</option>
+          <option value="ammonium">Ammonium, NH₄⁺ (pKa 9.25)</option>
+          <option value="mystery">Mystery acid: find its pKa</option>
+        </select>
+      </label>
+    </div>
+    <div style="overflow-x:auto"><svg id="titSvg" viewBox="0 0 640 360" width="100%" style="min-width:420px;cursor:crosshair" role="img" aria-label="Titration curve"></svg></div>
+    <label class="ctl">Equivalents of OH⁻ added <span class="val" id="eqv"></span><input type="range" id="eqR" min="0" max="1" step="0.01" value="0.2"></label>
+    <div class="readout" id="titRead"></div>
+    <div class="formula" id="titHH"></div>
+    <div id="mysteryBox" hidden>
+      <div class="row">
+        <label class="ctl">Your pKa estimate <input type="text" id="mysGuess" inputmode="decimal" placeholder="e.g. 5.2" size="8"></label>
+        <button class="btn" id="mysCheck" style="align-self:end">Check</button>
+        <button class="btn ghost" id="mysNew" style="align-self:end">New mystery acid</button>
+      </div>
+      <div id="mysFb"></div>
+    </div>
+  </div>
+
+  <div class="bench">
+    <h3>Your blood buffer</h3>
+    <p class="hint">CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. Using the rounded pKa of 6.4: pH = 6.4 + log([HCO₃⁻]/[CO₂]). Your lungs control CO₂ and your kidneys control HCO₃⁻.</p>
+    <div class="row" id="bloodPresets"></div>
+    <div class="grid2">
+      <label class="ctl">[HCO₃⁻] (mM): kidneys <span class="val" id="hco3v"></span><input type="range" id="hco3" min="8" max="44" step="0.5" value="24"></label>
+      <label class="ctl">[CO₂] (mM): lungs <span class="val" id="co2v"></span><input type="range" id="co2" min="0.6" max="5" step="0.1" value="2.4"></label>
+    </div>
+    <div class="formula" id="bloodF"></div>
+    <div class="phscale" aria-hidden="true"><div class="needle" id="needle"></div>
+      <span class="lab" style="left:6px">6.8</span><span class="lab" style="left:calc(50% - 10px)">7.4</span><span class="lab" style="right:6px">8.0</span></div>
+    <div class="row"><span class="pill" id="bloodPill"></span><span class="hint" id="bloodNote"></span></div>
+  </div>
+
+  <div class="bench">
+    <h3>Calculation practice</h3>
+    <p class="hint">New numbers every time. Type your answer, then check it or open the worked solution. Fractions like 4/5 are fine.</p>
+    <div class="row">
+      <label class="ctl">Problem type
+        <select id="probType">
+          <option value="mix">Mixed (any type)</option>
+          <option value="strong">pH of a strong acid or base</option>
+          <option value="m1">Weak acid + strong base (method 1)</option>
+          <option value="m2">Weak base + strong acid (method 2)</option>
+          <option value="nh3">Ammonia buffer from K_b</option>
+          <option value="frac">Fraction protonated</option>
+          <option value="recipe">Make a buffer (method 3)</option>
+          <option value="pka">Find the pKa</option>
+        </select>
+      </label>
+      <button class="btn ghost" id="probNew" style="align-self:end">New problem</button>
+    </div>
+    <div class="prob" id="prob"></div>
+  </div>
+</section>
+
+<!-- ========== CHECKPOINT ========== -->
+<section class="station" id="checkpoint" role="tabpanel" hidden>
+  <div class="st-head"><h2>Module 0 checkpoint</h2><span class="progress" data-prog="checkpoint"></span></div>
+  <p class="src">Exam-style questions drawn from all of the Module 0 videos. Each answer comes with an explanation.</p>
+  <div class="bench" id="quiz"></div>
+</section>
+
+<footer>Built from the CHE 5380 Module 0 lecture videos and slides. pKa values match the ones used in the videos. When a test gives a different value, use the one given.</footer>
+</div></main>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const el=(tag,attrs={},...kids)=>{const e=document.createElement(tag);for(const k in attrs){if(k==="class")e.className=attrs[k];else if(k==="html")e.innerHTML=attrs[k];else if(k.startsWith("on"))e.addEventListener(k.slice(2),attrs[k]);else e.setAttribute(k,attrs[k]);}kids.flat().forEach(c=>e.append(c&&c.nodeType?c:document.createTextNode(c??"")));return e;};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const fb=(node,kind,html)=>{node.innerHTML=html?`<div class="fb ${kind}">${html}</div>`:"";};
+const fix=(x,d=2)=>Number(x).toFixed(d);
+const log10=Math.log10;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const rnd=(a,b,d=2)=>Number((a+Math.random()*(b-a)).toFixed(d));
+
+/* ---------- tabs + progress ---------- */
+const STATIONS=[["origins","Origins & cells"],["groups","Condensation"],["energy","Free energy"],["water","Water"],["buffers","Buffers"],["checkpoint","Checkpoint"]];
+const tasks={origins:["order","match","sort"],groups:["built"],energy:["signs"],water:["rank","hbonds"],buffers:["mystery","practice"],checkpoint:["quiz"]};
+const taskLabel={order:"order",match:"names",sort:"cells",built:"9 groups",signs:"predictions",rank:"ranking",hbonds:"H bonds",mystery:"mystery pKa",practice:"3 problems",quiz:"quiz"};
+const done=new Set();
+const tabsNav=$("#tabs");
+STATIONS.forEach(([id,label])=>{
+  const b=el("button",{role:"tab","aria-selected":"false","aria-controls":id,id:"tab-"+id,onclick:()=>show(id,true)},el("span",{class:"dot","data-dot":id}),label);
+  tabsNav.append(b);
+});
+function show(id,push){
+  STATIONS.forEach(([s])=>{$("#"+s).hidden=s!==id;$("#tab-"+s).setAttribute("aria-selected",String(s===id));});
+  if(push){try{history.replaceState(null,"","#"+id);}catch(e){}}
+  if(id==="buffers")drawTit();
+}
+function mark(station,task){done.add(station+":"+task);renderProg();}
+function renderProg(){
+  for(const s in tasks){
+    const t=tasks[s];const n=t.filter(x=>done.has(s+":"+x)).length;
+    const p=document.querySelector(`[data-prog="${s}"]`);
+    p.textContent=n===t.length?"Station complete":`${n} of ${t.length} done · `+t.filter(x=>!done.has(s+":"+x)).map(x=>taskLabel[x]).join(", ");
+    p.classList.toggle("done",n===t.length);
+    document.querySelector(`[data-dot="${s}"]`).classList.toggle("done",n===t.length);
+  }
+}
+
+/* ---------- generic tap-to-order ---------- */
+function orderer(slotsEl,poolEl,items,labelFn){
+  let seq=[];
+  function render(){
+    slotsEl.innerHTML="";
+    items.forEach((_,i)=>{
+      const it=seq[i];
+      const s=el("div",{class:"slot"+(it?" filled":"")},el("b",{},String(i+1)),it?labelFn(it):"Tap a card below");
+      if(it){s.style.cursor="pointer";s.title="Tap to remove";s.addEventListener("click",()=>{seq.splice(i,1);render();});}
+      slotsEl.append(s);
+    });
+    poolEl.innerHTML="";
+    order.forEach(it=>{
+      const used=seq.includes(it);
+      const c=el("button",{class:"chip"+(used?" used":""),type:"button"},labelFn(it));
+      if(used)c.disabled=true;else c.addEventListener("click",()=>{seq.push(it);render();});
+      poolEl.append(c);
+    });
+  }
+  let order=shuffle(items);
+  render();
+  return{
+    check(){const sl=[...slotsEl.children];let ok=seq.length===items.length;items.forEach((it,i)=>{const good=seq[i]===it;if(!good)ok=false;if(seq[i])sl[i].classList.add(good?"ok":"no");});return{ok,full:seq.length===items.length};},
+    reset(){seq=[];order=shuffle(items);render();}
+  };
+}
+
+/* ---------- STATION 1 ---------- */
+const STEPS=[
+ {t:"Creating monomers",d:"Building blocks such as amino acids and nucleotides form abiotically."},
+ {t:"Making polymers",d:"Monomers accumulate in solution and join by condensation reactions."},
+ {t:"Self-replicating systems",d:"Molecules begin copying themselves through complementarity."},
+ {t:"Making life",d:"Something truly alive emerges, more than even a virus."}];
+const ord=orderer($("#ordSlots"),$("#ordPool"),STEPS,s=>el("span",{},el("b",{style:"color:inherit;font-family:inherit"},s.t),": "+s.d));
+$("#ordCheck").onclick=()=>{const r=ord.check();
+  if(!r.full)return fb($("#ordFb"),"info","Place all four steps first.");
+  if(r.ok){fb($("#ordFb"),"ok","<b>Correct.</b> Monomers → polymers → self-replicating systems → life. Your instructor calls the last two steps the biggest leaps.");mark("origins","order");}
+  else fb($("#ordFb"),"no","<b>Not yet.</b> Steps in red are out of place. Tap a placed step to remove it.");};
+$("#ordReset").onclick=()=>{ord.reset();fb($("#ordFb"));};
+
+const PEOPLE=["Urey & Miller","Oparin & Haldane","Thomas Cech","Carl Woese","Lynn Margulis","Francis Crick & Leslie Orgel"];
+const MATCH=[
+ ["Ran a spark-discharge experiment (NH₃, CH₄, H₂O, H₂ plus simulated lightning) that formed amino acids abiotically","Urey & Miller","The Urey–Miller experiment (1953) made a racemic mix of some amino acids."],
+ ["First proposed the idea that the spark-discharge experiment later tested","Oparin & Haldane","Oparin and Haldane proposed it; Urey and Miller ran the experiment."],
+ ["Discovered the first RNA enzyme, a ribozyme","Thomas Cech","Cech's ribozyme gave the RNA World hypothesis major support."],
+ ["Compared rRNA sequences and discovered the Archaea, a third domain of life","Carl Woese","Woese used ribosomal RNA sequences as an evolutionary measure."],
+ ["Proposed the endosymbiotic origin of mitochondria and chloroplasts","Lynn Margulis","Supporting evidence: mitochondria have their own circular, bacteria-like DNA."],
+ ["Proposed directed panspermia: life on Earth was deliberately seeded from elsewhere","Francis Crick & Leslie Orgel","Crick, of DNA double-helix fame, published this with Orgel."]];
+const matchTbl=$("#matchTbl");
+const matchSel=MATCH.map((m,i)=>{
+  const s=el("select",{id:"m"+i,"aria-label":"Choose who proposed this"},el("option",{value:""},"Choose…"),...PEOPLE.map(p=>el("option",{value:p},p)));
+  matchTbl.append(el("div",{class:"r"},el("span",{},m[0]),s));return s;});
+$("#matchCheck").onclick=()=>{let n=0;const rows=[...matchTbl.children];const miss=[];
+  MATCH.forEach((m,i)=>{const ok=matchSel[i].value===m[1];rows[i].classList.remove("ok","no");if(matchSel[i].value)rows[i].classList.add(ok?"ok":"no");if(ok)n++;else miss.push(m);});
+  if(n===MATCH.length){fb($("#matchFb"),"ok","<b>All six correct.</b> "+MATCH.map(m=>m[2]).slice(0,2).join(" "));mark("origins","match");}
+  else fb($("#matchFb"),"no",`<b>${n} of ${MATCH.length} correct.</b> Each name is used once. Hint for one you missed: ${miss[0][2].replace(miss[0][1],"this scientist")}`);};
+
+const BINS=["Prokaryotes","All eukaryotes","Plant cells only"];
+const SORT=[
+ ["No nucleus; DNA sits in a nucleoid","Prokaryotes"],
+ ["A single plasma membrane and no membrane-bound organelles","Prokaryotes"],
+ ["Includes both Bacteria and Archaea","Prokaryotes"],
+ ["Membrane-bound nucleus","All eukaryotes"],
+ ["Mitochondria","All eukaryotes"],
+ ["ER and Golgi","All eukaryotes"],
+ ["Volume 10³–10⁴ times larger than a typical bacterium","All eukaryotes"],
+ ["Chloroplasts that carry out photosynthesis","Plant cells only"],
+ ["Large central vacuole","Plant cells only"]];
+const sortTbl=$("#sortTbl");const sortVals=[];
+shuffle(SORT.map((s,i)=>i)).forEach(i=>{
+  const s=SORT[i];const seg=el("div",{class:"seg",role:"group","aria-label":s[0]});
+  BINS.forEach(b=>{const bt=el("button",{type:"button","aria-pressed":"false"},b);bt.onclick=()=>{[...seg.children].forEach(x=>x.setAttribute("aria-pressed",String(x===bt)));sortVals[i]=b;};seg.append(bt);});
+  const r=el("div",{class:"r","data-i":i},el("span",{},s[0]),seg);sortTbl.append(r);});
+$("#sortCheck").onclick=()=>{let n=0;[...sortTbl.children].forEach(r=>{const i=+r.dataset.i;const ok=sortVals[i]===SORT[i][1];r.classList.remove("ok","no");if(sortVals[i])r.classList.add(ok?"ok":"no");if(ok)n++;});
+  if(n===SORT.length){fb($("#sortFb"),"ok","<b>All sorted.</b> Note that plant cells have mitochondria too, and that bacteria and archaea are both prokaryotes but distinct domains.");mark("origins","sort");}
+  else fb($("#sortFb"),"no",`<b>${n} of ${SORT.length} correct.</b> Remember that plant cells are eukaryotes, so they have everything in the eukaryote column plus their own extras.`);};
+
+/* ---------- STATION 2 ---------- */
+const R={
+ acid:{n:"Carboxylic acid",f:"R–COOH"}, alc:{n:"Alcohol",f:"R′–OH"}, amine:{n:"Primary amine",f:"R′–NH₂"},
+ thiol:{n:"Thiol",f:"R′–SH"}, phos:{n:"Phosphoric acid",f:"(HO)₂P(O)–OH"}, carb:{n:"Aldehyde or ketone",f:"R–C(=O)–R″"},
+ alc2:{n:"Two alcohols",f:"2 R′–OH"}, acid2:{n:"Carboxylic acid",f:"R′–COOH"}, phos2:{n:"Phosphoric acid",f:"HO–P(O)(OH)₂"}};
+const POOL=["acid","alc","amine","thiol","phos","carb","alc2"];
+const PROD={
+ "acid+alc":{name:"Ester",eq:"R–COOH + HO–R′ → R–CO–O–R′ + H₂O",e:false,note:"R–C=O attached to a heteroatom is an acyl group."},
+ "acid+amine":{name:"Amide",eq:"R–COOH + H₂N–R′ → R–CO–NH–R′ + H₂O",e:false,note:"When the two partners are amino acids, this amide is a peptide bond. Chaining them makes a protein."},
+ "acid+thiol":{name:"Thioester",eq:"R–COOH + HS–R′ → R–CO–S–R′ + H₂O",e:false,note:"Same pattern as an ester, with sulfur in place of oxygen."},
+ "acid+acid":{name:"Acid anhydride",eq:"R–COOH + HOOC–R′ → R–CO–O–CO–R′ + H₂O",e:true,note:"Anhydrides contain stored chemical energy. Their hydrolysis is highly exergonic."},
+ "acid+phos":{name:"Mixed anhydride",eq:"R–COOH + HO–PO₃H₂ → R–CO–O–PO₃H₂ + H₂O",e:true,note:"A carboxylic–phosphoric anhydride. Like every anhydride, it stores chemical energy."},
+ "phos+phos":{name:"Phosphoanhydride",eq:"(HO)₂OP–OH + HO–PO(OH)₂ → (HO)₂OP–O–PO(OH)₂ + H₂O",e:true,note:"ATP has two phosphoanhydride bonds. That is where its energy is stored, which makes ATP the cell's energy currency."},
+ "alc+phos":{name:"Phosphoester",eq:"R′–OH + HO–PO(OH)₂ → R′–O–PO(OH)₂ + H₂O",e:false,note:"A low-energy bond. ATP also has one phosphoester, and its hydrolysis does not release much energy."},
+ "alc2+phos":{name:"Phosphodiester",eq:"2 R′–OH + H₃PO₄ → R′–O–PO(OH)–O–R′ + 2 H₂O",e:false,note:"Phosphoric acid is polyprotic, so it can condense with two alcohols. Phosphodiester linkages join the nucleotides in DNA and RNA."},
+ "amine+carb":{name:"Imine (Schiff base)",eq:"R–C(=O)–R″ + H₂N–R′ → R(R″)C=N–R′ + H₂O",e:false,note:"Connect N to the carbonyl carbon and keep the double bond. Imines are also called Schiff bases."}};
+const TARGETS=["Ester","Amide","Thioester","Imine (Schiff base)","Acid anhydride","Mixed anhydride","Phosphoanhydride","Phosphoester","Phosphodiester"];
+const built=new Set();let rA=null,rB=null;
+const pool=$("#reactPool");
+POOL.forEach(k=>pool.append(el("button",{class:"chip",type:"button",onclick:()=>addR(k)},el("span",{},R[k].n," "),el("span",{class:"mono",style:"opacity:.75"},R[k].f))));
+function addR(k){if(!rA)rA=k;else if(!rB)rB=k;else{rA=rB;rB=k;}renderRxn();}
+function slotHtml(k,lbl){return k?`<span class="hint">${lbl}</span><span>${R[k].n}</span><span class="f">${R[k].f}</span>`:`<span class="hint">${lbl}</span>`;}
+function renderRxn(){
+  $("#slotA").className="rslot"+(rA?" filled":"");$("#slotA").innerHTML=slotHtml(rA,"Reactant 1");
+  $("#slotB").className="rslot"+(rB?" filled":"");$("#slotB").innerHTML=slotHtml(rB,"Reactant 2");
+  const out=$("#rxnOut");out.innerHTML="";
+  if(rA&&rB){
+    const key=[rA,rB].sort().join("+");const p=PROD[key];
+    if(p){
+      built.add(p.name);
+      const box=el("div",{class:"product"},
+        el("div",{class:"row"},el("span",{class:"name"},p.name),el("span",{class:"tag "+(p.e?"hi":"lo")},p.e?"High-energy: stores chemical energy":"Not an anhydride")),
+        el("div",{class:"eq"},p.eq),el("p",{},p.note));
+      const hyd=el("button",{class:"btn ghost",type:"button"},"Hydrolyze it");
+      const hout=el("div");
+      hyd.onclick=()=>{const [l,r]=p.eq.split(" → ");fb(hout,"info",`<b>Hydrolysis:</b> <span class="mono">${r.replace(/ \+ (2 )?H₂O$/,"")} + ${/2 H₂O/.test(r)?"2 ":""}H₂O → ${l}</span>${p.e?". Highly exergonic: ΔG is very negative.":""}`);};
+      box.append(el("div",{class:"row"},hyd),hout);
+      out.append(box);
+    } else {
+      out.append(el("div",{class:"fb info"},"These two don't form one of the compound groups covered in this module. Try pairing something with a carboxylic acid or phosphoric acid, or a carbonyl with an amine."));
+    }
+    renderBuilt();
+  }
+}
+function renderBuilt(){const b=$("#builtList");b.innerHTML="";TARGETS.forEach(t=>b.append(el("span",{class:built.has(t)?"got":""},t)));if(TARGETS.every(t=>built.has(t)))mark("groups","built");}
+$("#rxnClear").onclick=()=>{rA=rB=null;renderRxn();};
+// allow acid+acid and phos+phos by tapping the same chip twice
+renderRxn();renderBuilt();
+
+/* ---------- STATION 3 ---------- */
+const SIGNS=[["ΔH negative, ΔS positive","Always"],["ΔH positive, ΔS negative","Never"],["ΔH negative, ΔS negative","Only at low T"],["ΔH positive, ΔS positive","Only at high T"]];
+const SOPTS=["Always","Never","Only at low T","Only at high T"];
+const signTbl=$("#signTbl");
+const signSel=SIGNS.map((s,i)=>{const sel=el("select",{id:"sg"+i,"aria-label":"When is it spontaneous? "+s[0]},el("option",{value:""},"Choose…"),...SOPTS.map(o=>el("option",{value:o},o)));signTbl.append(el("div",{class:"r"},el("span",{class:"mono"},s[0]),sel));return sel;});
+$("#signCheck").onclick=()=>{let n=0;const rows=[...signTbl.children];SIGNS.forEach((s,i)=>{const ok=signSel[i].value===s[1];rows[i].classList.remove("ok","no");if(signSel[i].value)rows[i].classList.add(ok?"ok":"no");if(ok)n++;});
+  if(n===4){fb($("#signFb"),"ok","<b>Correct.</b> When ΔH and ΔS share a sign, temperature decides, because T multiplies ΔS. Try the ice-melting scenario below at −10, 0 and 25 °C.");mark("energy","signs");}
+  else fb($("#signFb"),"no",`<b>${n} of 4 correct.</b> Write out ΔG = ΔH − TΔS with the signs. Remember that −T × (negative ΔS) gives a positive contribution.`);};
+
+const PRESETS=[
+ {n:"Protein folding",h:-50,s:-150,t:37,note:"Folding orders the chain, so ΔS < 0 and −TΔS is positive. The many weak H bonds and other interactions that form make ΔH negative enough to win, and ΔG < 0."},
+ {n:"Forcing oil into water",h:-2,s:-60,t:37,note:"Water molecules order into a cage around the nonpolar solute. ΔS of water drops, so ΔG > 0. Under deep-ocean cold and pressure this can form methane clathrates."},
+ {n:"Hydrophobic effect",h:2,s:60,t:37,note:"Water excludes the nonpolar solute and regains its disorder (ΔS > 0). The process is entropically driven: −TΔS makes ΔG negative. The same effect drives micelle formation."},
+ {n:"Ice melting",h:6.01,s:22,t:25,note:"ΔH and ΔS are both positive, so temperature decides. Slide T to 0 °C to find equilibrium (ΔG ≈ 0) and below it to see melting become unfavorable."}];
+const dH=$("#dH"),dS=$("#dS"),Tc=$("#T");let presetNote="";
+PRESETS.forEach(p=>$("#presets").append(el("button",{class:"chip",type:"button",onclick:()=>{dH.value=p.h;dS.value=p.s;Tc.value=p.t;presetNote=p.note;calcG();}},p.n)));
+function calcG(){
+  const h=+dH.value,s=+dS.value,t=+Tc.value,K=t+273.15,g=h-K*s/1000;
+  $("#dHv").textContent=fix(h,2);$("#dSv").textContent=fix(s,1);$("#Tv").textContent=`${t} °C = ${fix(K,2)} K`;
+  $("#gFormula").textContent=`ΔG = ${fix(h,2)} − (${fix(K,2)})(${fix(s/1000,4)}) = ${fix(g,2)} kJ/mol`;
+  const v=$("#gVerdict");
+  if(Math.abs(g)<0.05){v.className="verdict eqm";v.textContent="ΔG ≈ 0: at equilibrium. No net energy consumed or released.";}
+  else if(g<0){v.className="verdict exer";v.textContent=`Exergonic: favorable ("spontaneous") left to right. The reverse would be +${fix(-g,2)} kJ/mol.`;}
+  else{v.className="verdict ender";v.textContent=`Endergonic: unfavorable as written. The reverse direction is favorable at ${fix(-g,2)} kJ/mol.`;}
+  $("#gNote").textContent=presetNote||"“Spontaneous” is a thermodynamic term. It says nothing about how fast a reaction goes; that's kinetics.";
+}
+[dH,dS,Tc].forEach(i=>i.addEventListener("input",()=>{presetNote="";calcG();}));calcG();
+
+const g0=$("#g0"),lq=$("#lq");const RT=8.3145*298.15/1000;
+function sci(x){if(x>=0.01&&x<1e4)return x.toPrecision(3);const e=Math.floor(log10(x));return (x/10**e).toFixed(2)+" × 10"+String(e).replace(/-/,"⁻").replace(/\d/g,d=>"⁰¹²³⁴⁵⁶⁷⁸⁹"[d]);}
+function calcQ(){
+  const G0=+g0.value,L=+lq.value,K=Math.exp(-G0/RT),Q=10**L,G=G0+RT*Math.log(Q);
+  $("#g0v").textContent=fix(G0,1)+" kJ/mol";$("#lqv").textContent="Q = "+sci(Q);
+  $("#keq").textContent=sci(K);$("#gq").textContent=fix(G,2)+" kJ/mol";
+  if(Math.abs(G)<0.05)fb($("#qFb"),"info","<b>Q = K′eq, so ΔG = 0.</b> The reaction is at equilibrium. Living cells are never here: they hold metabolites at a steady state with constant flux.");
+  else if(G<0)fb($("#qFb"),"ok",`<b>Q &lt; K′eq, so ΔG &lt; 0.</b> The reaction proceeds forward.${G0>0?" Note that ΔG°′ is positive, yet low product levels still make it favorable.":""}`);
+  else fb($("#qFb"),"no",`<b>Q &gt; K′eq, so ΔG &gt; 0.</b> The reverse reaction is favored.${G0<0?" ΔG°′ is negative, but too much product has built up.":""}`);
+}
+[g0,lq].forEach(i=>i.addEventListener("input",calcQ));
+$("#setEq").onclick=()=>{lq.value=Math.max(-6,Math.min(6,-(+g0.value)/RT/Math.LN10));calcQ();};
+calcQ();
+
+/* ---------- STATION 4 ---------- */
+const BONDS=[{t:"Covalent bond",v:"≈ 400 kJ/mol"},{t:"Ionic interaction (salt bridge)",v:"≈ 100 kJ/mol"},{t:"Hydrogen bond",v:"≈ 20 kJ/mol: know this one"},{t:"Dipole–dipole",v:"≈ 10 kJ/mol"},{t:"London dispersion (van der Waals)",v:"≈ 0.5 kJ/mol or less"}];
+const rank=orderer($("#rankSlots"),$("#rankPool"),BONDS,b=>b.t);
+$("#rankCheck").onclick=()=>{const r=rank.check();
+  if(!r.full)return fb($("#rankFb"),"info","Place all five first.");
+  if(r.ok){fb($("#rankFb"),"ok","<b>Correct.</b> "+BONDS.map(b=>`${b.t} ${b.v}`).join(" · ")+". Everything below covalent is non-covalent.");mark("water","rank");}
+  else fb($("#rankFb"),"no","<b>Not yet.</b> Ionic interactions are the strongest of the non-covalent interactions. London dispersion forces (induced dipole–induced dipole) are the weakest.");};
+$("#rankReset").onclick=()=>{rank.reset();fb($("#rankFb"));};
+
+const HB=[
+ ["O–H ··· :O","Water to water",true,"O is a strong donor and acceptor. Each water can make four H bonds."],
+ ["N–H ··· :O","Amine H to a carbonyl O",true,"N and O are both electronegative."],
+ ["C–H ··· :O","Methyl H to water O",false,"C isn't electronegative enough to make C–H polar. Never draw an H bond to the H of a C–H."],
+ ["F–H ··· :F","HF to HF",true,"F is the most electronegative element."],
+ ["O–H ··· :N","Water H to ammonia N",true,"An electronegative donor and an electronegative acceptor."],
+ ["C–H ··· :N","Alkane H to an amine N",false,"Again a C–H donor, so this is not an H bond."]];
+const hcards=$("#hcards");const hbDone=new Set();
+HB.forEach((h,i)=>{
+  const out=el("div");const card=el("div",{class:"hcard"},el("span",{class:"f"},h[0]),el("span",{class:"hint"},h[1]));
+  const yes=el("button",{class:"btn ghost",type:"button"},"Valid H bond"),no=el("button",{class:"btn ghost",type:"button"},"Not an H bond");
+  const ans=v=>{const ok=v===h[2];card.classList.remove("ok","no");card.classList.add(ok?"ok":"no");fb(out,ok?"ok":"no",`<b>${ok?"Right.":"Look again."}</b> ${h[3]}`);if(ok)hbDone.add(i);else hbDone.delete(i);if(hbDone.size===HB.length)mark("water","hbonds");};
+  yes.onclick=()=>ans(true);no.onclick=()=>ans(false);
+  card.append(el("div",{class:"row"},yes,no),out);hcards.append(card);});
+
+const outC=$("#outC");let cellType="animal";
+[...$("#cellType").children].forEach(b=>b.onclick=()=>{cellType=b.dataset.v;[...$("#cellType").children].forEach(x=>x.setAttribute("aria-pressed",String(x===b)));drawCell();});
+const dots=Array.from({length:160},()=>[Math.random(),Math.random()]);
+function drawCell(){
+  const o=+outC.value,inside=300;$("#outv").textContent=o+" mOsm/L";
+  const svg=$("#cellSvg");const cx=300,cy=110,r0=62;
+  let r=r0*Math.cbrt(inside/o);const wall=cellType==="wall";
+  let lysed=false;
+  if(wall)r=Math.min(r,r0*1.08);
+  else if(o<=110){lysed=true;}
+  r=Math.max(r,r0*0.62);if(!wall)r=Math.min(r,r0*1.32);
+  const nOut=Math.round(o/600*110);
+  let s="";
+  for(let i=0;i<nOut;i++){const[x,y]=dots[i];const px=x*600,py=y*220;if(Math.hypot(px-cx,py-cy)>r+12)s+=`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3" fill="var(--muted)" opacity=".55"/>`;}
+  if(wall){const w=r0*1.12;s+=`<rect x="${cx-w}" y="${cy-w*0.92}" width="${2*w}" height="${1.84*w}" rx="12" fill="none" stroke="var(--accent-ink)" stroke-width="5" opacity=".7"/>`;}
+  if(lysed){
+    for(let k=0;k<10;k++){const a=k/10*Math.PI*2;const x1=cx+Math.cos(a)*r0*1.1,y1=cy+Math.sin(a)*r0*1.1,x2=cx+Math.cos(a+0.25)*r0*1.35,y2=cy+Math.sin(a+0.25)*r0*1.35;s+=`<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} Q ${(cx+Math.cos(a+0.12)*r0*1.5).toFixed(1)} ${(cy+Math.sin(a+0.12)*r0*1.5).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="var(--bad)" stroke-width="3"/>`;}
+    s+=`<text x="${cx}" y="${cy+5}" text-anchor="middle" fill="var(--bad)" font-size="16" font-weight="700">Lysed</text>`;
+  } else {
+    const nIn=Math.round(inside/600*110*(r0/r)**1.2*0.5);
+    s+=`<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="var(--good-bg)" stroke="var(--accent-ink)" stroke-width="3"/>`;
+    for(let i=0;i<nIn;i++){const a=i*2.399,rr=Math.sqrt((i+0.5)/nIn)*(r-8);s+=`<circle cx="${(cx+Math.cos(a)*rr).toFixed(1)}" cy="${(cy+Math.sin(a)*rr).toFixed(1)}" r="3" fill="var(--accent-ink)" opacity=".6"/>`;}
+  }
+  const arrow=o<285?"→ water flows in":o>315?"water flows out →":"no net flow";
+  s+=`<text x="16" y="24" fill="var(--muted)" font-size="16" font-weight="600">Outside: ${o} mOsm/L</text><text x="584" y="24" text-anchor="end" fill="var(--muted)" font-size="16" font-weight="600">${arrow}</text>`;
+  svg.innerHTML=s;
+  let msg;
+  if(o<285){msg=wall?"<b>Hypotonic.</b> Water flows in and the cell swells, but the cell wall protects plant cells and bacteria from bursting."
+    :lysed?"<b>Hypotonic, osmotic lysis.</b> So much water enters an animal cell that the membrane bursts. This is why drinking extreme amounts of water, or drinking distilled water, can be dangerous."
+    :"<b>Hypotonic.</b> Less solute outside than inside, so water moves in and the animal cell swells. Lower it further to see lysis.";fb($("#cellFb"),o<200?"no":"info",msg);}
+  else if(o>315)fb($("#cellFb"),"info","<b>Hypertonic.</b> More solute outside, so water leaves the cell and the cell shrinks.");
+  else fb($("#cellFb"),"ok","<b>Isotonic.</b> Equal solute inside and out. Water moves both ways, with no net change.");
+}
+outC.addEventListener("input",drawCell);drawCell();
+
+/* ---------- STATION 5: titration ---------- */
+const ACIDS={
+ acetic:{pk:[4.76],sp:["CH₃COOH","CH₃COO⁻"]},
+ phosphoric:{pk:[2.16,7.21,12.32],sp:["H₃PO₄","H₂PO₄⁻","HPO₄²⁻","PO₄³⁻"]},
+ carbonic:{pk:[6.35],sp:["CO₂/H₂CO₃","HCO₃⁻"]},
+ ammonium:{pk:[9.25],sp:["NH₄⁺","NH₃"]},
+ mystery:{pk:[5],sp:["HA","A⁻"],hidden:true}};
+function newMystery(){ACIDS.mystery.pk=[rnd(3.5,10.5,1)];ACIDS.mystery.solved=false;}
+newMystery();
+function solvePH(pks,eq){const C=1,Na=eq*C,Ka=pks.map(p=>10**-p);
+  const f=p=>{const H=10**-p;let t=[1];Ka.forEach(k=>t.push(t[t.length-1]*k/H));const S=t.reduce((a,b)=>a+b,0);let avg=0;t.forEach((v,j)=>avg+=j*v);return H+Na-1e-14/H-C*avg/S;};
+  let lo=-1,hi=15;for(let i=0;i<50;i++){const m=(lo+hi)/2;if(f(m)>0)lo=m;else hi=m;}return (lo+hi)/2;}
+const acidSel=$("#acidSel"),eqR=$("#eqR");
+const X0=52,X1=620,Y0=320,Y1=16;
+const xs=(e,n)=>X0+(X1-X0)*e/n, ys=p=>Y0-(Y0-Y1)*p/14;
+function drawTit(){
+  const a=ACIDS[acidSel.value],n=a.pk.length;eqR.max=n;if(+eqR.value>n)eqR.value=n;
+  const e=+eqR.value,svg=$("#titSvg");let s="";
+  if(!a.hidden)a.pk.forEach(p=>{s+=`<rect class="zone" x="${X0}" y="${ys(Math.min(14,p+1))}" width="${X1-X0}" height="${ys(Math.max(0,p-1))-ys(Math.min(14,p+1))}"/>`;});
+  for(let p=0;p<=14;p+=2){s+=`<line class="ax" x1="${X0}" x2="${X1}" y1="${ys(p)}" y2="${ys(p)}"/><text class="axl" x="${X0-8}" y="${ys(p)+4}" text-anchor="end">${p}</text>`;}
+  const step=n===1?0.25:0.5;
+  for(let q=0;q<=n+1e-9;q+=step){s+=`<line class="ax" x1="${xs(q,n)}" x2="${xs(q,n)}" y1="${Y0}" y2="${Y0+5}"/><text class="axl" x="${xs(q,n)}" y="${Y0+19}" text-anchor="middle">${+q.toFixed(2)}</text>`;}
+  s+=`<text class="axl" x="${(X0+X1)/2}" y="${Y0+37}" text-anchor="middle">Equivalents of OH⁻ added</text><text class="axl" transform="translate(14 ${(Y0+Y1)/2}) rotate(-90)" text-anchor="middle">pH</text>`;
+  if(!a.hidden||a.solved)a.pk.forEach((p,i)=>{s+=`<line class="pkaline" x1="${X0}" x2="${X1}" y1="${ys(p)}" y2="${ys(p)}"/><text class="pkalbl" x="${X0+8}" y="${ys(p)-7}">pKa${n>1?["₁","₂","₃"][i]:""} = ${p}</text>`;});
+  let d="";for(let k=0;k<=240;k++){const q=n*k/240;d+=(k?"L":"M")+xs(q,n).toFixed(1)+" "+ys(solvePH(a.pk,q)).toFixed(1);}
+  s+=`<path class="curve" d="${d}"/>`;
+  const ph=solvePH(a.pk,e);s+=`<circle class="marker" cx="${xs(e,n)}" cy="${ys(ph)}" r="7"/>`;
+  svg.innerHTML=s;
+  const seg=Math.min(Math.floor(e),n-1),f=e-seg;
+  $("#eqv").textContent=fix(e,2);
+  const pkTxt=a.hidden&&!a.solved?"?":fix(a.pk[seg],2);
+  $("#titRead").innerHTML=`<div><small>pH</small><span>${fix(ph,2)}</span></div><div><small>Weak acid ${a.sp[seg]}</small><span>${fix(1-f,2)} eq</span></div><div><small>Conjugate base ${a.sp[seg+1]}</small><span>${fix(f,2)} eq</span></div><div><small>Buffer?</small><span>${Math.abs(ph-a.pk[seg])<=1&&f>0.03&&f<0.97?"Yes":"No"}</span></div>`;
+  $("#titHH").textContent=(f>0.02&&f<0.98)?`pH = pKa + log([A⁻]/[HA]) = ${pkTxt} + log(${fix(f,2)}/${fix(1-f,2)})${a.hidden&&!a.solved?"":" = "+fix(a.pk[seg]+log10(f/(1-f)),2)}`
+    :`Near ${e<0.02?"the start":"an equivalence point"}: only one form is present, so this isn't a buffer and the HH shortcut doesn't apply.`;
+  $("#mysteryBox").hidden=!a.hidden;
+}
+acidSel.addEventListener("change",()=>{eqR.value=Math.min(+eqR.value,ACIDS[acidSel.value].pk.length);fb($("#mysFb"));drawTit();});
+eqR.addEventListener("input",drawTit);
+$("#titSvg").addEventListener("click",ev=>{const svg=ev.currentTarget,r=svg.getBoundingClientRect();const x=(ev.clientX-r.left)/r.width*640;const n=ACIDS[acidSel.value].pk.length;eqR.value=Math.max(0,Math.min(n,(x-X0)/(X1-X0)*n)).toFixed(2);drawTit();});
+$("#mysCheck").onclick=()=>{const g=parseFloat($("#mysGuess").value);const p=ACIDS.mystery.pk[0];
+  if(isNaN(g))return fb($("#mysFb"),"info","Type a number first.");
+  if(Math.abs(g-p)<=0.25){ACIDS.mystery.solved=true;fb($("#mysFb"),"ok",`<b>Yes. The pKa is ${p}.</b> You read it at the horizontal inflection point, half an equivalent of base, where [HA] = [A⁻].`);mark("buffers","mystery");drawTit();}
+  else fb($("#mysFb"),"no",`<b>Not quite.</b> Set the slider to exactly 0.50 equivalents. The pH there equals the pKa.`);};
+$("#mysNew").onclick=()=>{newMystery();$("#mysGuess").value="";fb($("#mysFb"));drawTit();};
+drawTit();
+
+/* ---------- blood ---------- */
+const hco3=$("#hco3"),co2=$("#co2");
+const BP=[
+ {n:"Normal",h:24,c:2.4,t:"A 10:1 ratio of HCO₃⁻ to CO₂ gives pH 7.4."},
+ {n:"Hyperventilating",h:24,c:1.2,t:"Breathing too fast blows off CO₂, the weak acid term, so pH rises. This is respiratory alkalosis."},
+ {n:"Breathing into a bag",h:24,c:2.4,t:"Rebreathing trapped CO₂ restores the weak acid term, and pH returns to 7.4."},
+ {n:"Too many antacids",h:40,c:2.4,t:"Bicarbonate antacids raise the HCO₃⁻ term, which pushes pH up."},
+ {n:"Diabetic ketoacidosis",h:12,c:2.4,t:"Acidic ketone bodies use up bicarbonate and pH falls. Near 7.1 a patient can be comatose, and around 6.9 it can be fatal."}];
+let bNote="";
+BP.forEach(p=>$("#bloodPresets").append(el("button",{class:"chip",type:"button",onclick:()=>{hco3.value=p.h;co2.value=p.c;bNote=p.t;calcBlood();}},p.n)));
+function calcBlood(){
+  const h=+hco3.value,c=+co2.value,ph=6.4+log10(h/c);
+  $("#hco3v").textContent=fix(h,1);$("#co2v").textContent=fix(c,1);
+  $("#bloodF").textContent=`pH = 6.4 + log(${fix(h,1)} / ${fix(c,1)}) = 6.4 + log(${fix(h/c,1)}) = ${fix(ph,2)}`;
+  $("#needle").style.left=Math.max(0,Math.min(100,(ph-6.8)/1.2*100))+"%";
+  const p=$("#bloodPill");
+  if(ph<7.35){p.className="pill no";p.textContent="Acidosis · pH "+fix(ph,2);}
+  else if(ph>7.45){p.className="pill warn";p.textContent="Alkalosis · pH "+fix(ph,2);}
+  else{p.className="pill ok";p.textContent="Normal · pH "+fix(ph,2);}
+  $("#bloodNote").textContent=bNote||"Even a 0.1 drop below 7.4 can cause headache and discomfort.";
+}
+[hco3,co2].forEach(i=>i.addEventListener("input",()=>{bNote="";calcBlood();}));calcBlood();
+
+/* ---------- practice generator ---------- */
+const L=x=>x>=1?fix(x,3):x.toPrecision(3);
+const GEN={
+ strong(){const base=Math.random()<0.4;const mM=pick([0.01,0.1,0.5,1,2,5,10,20]);const M=mM/1000;
+  if(!base){const ph=-log10(M);return{q:`What is the pH of a ${mM} mM solution of HCl?`,ans:ph,tol:0.02,unit:"",steps:[`HCl is a strong acid and dissociates completely: [H⁺] = ${mM} mM = <span class="mono">${M.toExponential(2)} M</span>`,`pH = −log[H⁺] = <span class="mono">−log(${M.toExponential(2)}) = ${fix(ph,2)}</span>`,`Bonus: pOH = 14 − pH = <span class="mono">${fix(14-ph,2)}</span>`]};}
+  const poh=-log10(M),ph=14-poh;return{q:`What is the pH of a ${mM} mM solution of NaOH?`,ans:ph,tol:0.02,steps:[`NaOH is a strong base and dissociates completely: [OH⁻] = <span class="mono">${M.toExponential(2)} M</span>`,`pOH = −log[OH⁻] = <span class="mono">${fix(poh,2)}</span>`,`pH = 14 − pOH = <span class="mono">${fix(ph,2)}</span>`]};},
+ m1(){let Va,Ca,Vb,Cb,nA,nB;do{Va=pick([100,150,200,250,300]);Ca=pick([0.1,0.2,0.3]);Vb=pick([25,50,75,100,150]);Cb=pick([0.1,0.2]);nA=Ca*Va/1000;nB=Cb*Vb/1000;}while(nB/nA<0.15||nB/nA>0.85);
+  const A=nB,HA=nA-nB,ph=4.76+log10(A/HA);
+  return{q:`What is the pH when ${Vb} mL of ${Cb} M NaOH is added to ${Va} mL of ${Ca} M acetic acid? The pKa of acetic acid is 4.76.`,ans:ph,tol:0.02,steps:[
+   `mol CH₃COOH = ${Ca} mol/L × ${Va/1000} L = <span class="mono">${L(nA)} mol</span>`,
+   `mol OH⁻ = ${Cb} mol/L × ${Vb/1000} L = <span class="mono">${L(nB)} mol</span> (less than the acid, so some HA remains)`,
+   `The strong base reacts completely: A⁻ formed = <span class="mono">${L(A)} mol</span>; HA left = ${L(nA)} − ${L(nB)} = <span class="mono">${L(HA)} mol</span>`,
+   `The volumes cancel: pH = 4.76 + log(${L(A)}/${L(HA)}) = 4.76 + (${fix(log10(A/HA),2)}) = <span class="mono">${fix(ph,2)}</span>`]};},
+ m2(){let Va,Ca,Vb,Cb,nA,nB;do{Va=pick([100,200,250,300,400]);Ca=pick([0.1,0.2]);Vb=pick([25,50,75,100]);Cb=pick([0.1,0.2,0.3]);nA=Ca*Va/1000;nB=Cb*Vb/1000;}while(nB/nA<0.15||nB/nA>0.85);
+  const HA=nB,A=nA-nB,ph=4.76+log10(A/HA);
+  return{q:`What is the pH when ${Vb} mL of ${Cb} M HCl is added to ${Va} mL of ${Ca} M sodium acetate? The pKa of acetic acid is 4.76.`,ans:ph,tol:0.02,steps:[
+   `mol acetate (A⁻) = ${Ca} × ${Va/1000} L = <span class="mono">${L(nA)} mol</span>`,
+   `mol H⁺ from HCl = ${Cb} × ${Vb/1000} L = <span class="mono">${L(nB)} mol</span>`,
+   `H⁺ reacts completely with A⁻: HA formed = <span class="mono">${L(HA)} mol</span>. Don't forget the subtraction: A⁻ left = ${L(nA)} − ${L(nB)} = <span class="mono">${L(A)} mol</span>`,
+   `pH = 4.76 + log(${L(A)}/${L(HA)}) = 4.76 + (${fix(log10(A/HA),2)}) = <span class="mono">${fix(ph,2)}</span>`]};},
+ nh3(){const a=rnd(0.2,0.8,2),b=rnd(0.2,0.8,2);const pkb=-log10(1.79e-5),pka=14-pkb,ph=pka+log10(b/a);
+  return{q:`What is the pH of a buffer made from ${a} mol of ammonium chloride and ${b} mol of ammonia? K_b for ammonia is 1.79 × 10⁻⁵.`,ans:ph,tol:0.02,steps:[
+   `pK_b = −log(1.79 × 10⁻⁵) = <span class="mono">${fix(pkb,2)}</span>`,
+   `pKa + pK_b = 14, so pKa (NH₄⁺) = 14 − ${fix(pkb,2)} = <span class="mono">${fix(pka,2)}</span>`,
+   `The weak base goes on top: pH = pKa + log([NH₃]/[NH₄⁺]) = ${fix(pka,2)} + log(${b}/${a})`,
+   `pH = ${fix(pka,2)} + (${fix(log10(b/a),2)}) = <span class="mono">${fix(ph,2)}</span>`]};},
+ frac(){const ph=pick([8.6,8.9,9.0,9.3,9.6,9.9,10.2,10.6]);const pka=9.6;const r=10**(ph-pka),fp=1/(1+r);const askP=Math.random()<0.7;
+  return{q:`The amino group of glycine has a pKa of 9.6. At pH ${fix(ph,1)}, what fraction of glycine has its amino group in the ${askP?"protonated R–NH₃⁺":"unprotonated R–NH₂"} form? Answer as a decimal or fraction.`,ans:askP?fp:1-fp,tol:0.01,steps:[
+   `${fix(ph,1)} = 9.6 + log([R–NH₂]/[R–NH₃⁺]), so log(ratio) = <span class="mono">${fix(ph-pka,1)}</span>`,
+   `[R–NH₂]/[R–NH₃⁺] = 10^(${fix(ph-pka,1)}) = <span class="mono">${fix(r,3)}</span>, which is ${fix(r,3)} : 1`,
+   `Total = ${fix(r,3)} + 1 = ${fix(r+1,3)} parts`,
+   `Fraction ${askP?"R–NH₃⁺":"R–NH₂"} = ${askP?"1":fix(r,3)} / ${fix(r+1,3)} = <span class="mono">${fix(askP?fp:1-fp,3)}</span> (${fix((askP?fp:1-fp)*100,1)}%)`]};},
+ recipe(){const ph=pick([6.5,6.6,6.7,6.9,7.0,7.1,7.2]);const tot=pick([1,0.5,0.1]);const r=10**(ph-6.82),fA=r/(1+r);const askA=Math.random()<0.5;const v=(askA?fA:1-fA)*tot;
+  return{q:`You need a ${tot} M phosphate buffer at pH ${fix(ph,1)}. The pKa of H₂PO₄⁻ is 6.82. What concentration (M) of ${askA?"HPO₄²⁻ (A⁻)":"H₂PO₄⁻ (HA)"} do you need?`,ans:v,tol:Math.max(0.003,tot*0.006),steps:[
+   `${fix(ph,1)} = 6.82 + log([HPO₄²⁻]/[H₂PO₄⁻]), so [A⁻]/[HA] = 10^(${fix(ph-6.82,2)}) = <span class="mono">${fix(r,3)}</span>`,
+   `Shortcut: total parts = ${fix(r,3)} + 1 = ${fix(r+1,3)}`,
+   `Fraction A⁻ = ${fix(r,3)}/${fix(r+1,3)} = ${fix(fA,3)}; fraction HA = 1/${fix(r+1,3)} = ${fix(1-fA,3)}`,
+   `[${askA?"HPO₄²⁻":"H₂PO₄⁻"}] = ${fix(askA?fA:1-fA,3)} × ${tot} M = <span class="mono">${fix(v,3)} M</span>. Check: the two concentrations add to ${tot} M.`]};},
+ pka(){let ha,a;do{ha=rnd(0.1,0.5,1);a=rnd(0.1,0.5,1);}while(ha===a);const ph=Number((4.87+log10(a/ha)+rnd(-0.05,0.05,2)).toFixed(2));const pk=ph-log10(a/ha);
+  return{q:`A researcher mixes ${ha} mol of propionic acid and ${a} mol of sodium propionate in 1.0 L of water and measures the pH as ${fix(ph,2)}. What is the pKa of propionic acid?`,ans:pk,tol:0.02,steps:[
+   `pH = pKa + log([propionate]/[propionic acid])`,
+   `${fix(ph,2)} = pKa + log(${a}/${ha}) = pKa + (${fix(log10(a/ha),2)})`,
+   `pKa = ${fix(ph,2)} − (${fix(log10(a/ha),2)}) = <span class="mono">${fix(pk,2)}</span>`]};}
+};
+const probEl=$("#prob");let cur=null,correctCount=0;
+function newProb(){
+  const t=$("#probType").value;const k=t==="mix"?pick(Object.keys(GEN)):t;cur=GEN[k]();cur.solved=false;
+  probEl.innerHTML="";
+  const inp=el("input",{type:"text",inputmode:"decimal",id:"probAns","aria-label":"Your answer",placeholder:"Your answer",size:"12"});
+  const out=el("div");const stepsBox=el("div",{hidden:""});
+  const check=el("button",{class:"btn",type:"button"},"Check");
+  const show=el("button",{class:"btn ghost",type:"button"},"Show worked solution");
+  const parse=v=>{v=v.trim().replace(/,/g,".");if(/^-?\d*\.?\d+\s*\/\s*\d*\.?\d+$/.test(v)){const[a,b]=v.split("/").map(Number);return a/b;}return v===""?NaN:Number(v);};
+  check.onclick=()=>{const v=parse(inp.value);if(isNaN(v))return fb(out,"info","Type a number first, like 4.46 or 4/5.");
+    if(Math.abs(v-cur.ans)<=cur.tol+1e-9){fb(out,"ok",`<b>Correct.</b> The answer is ${fix(cur.ans,cur.ans<1.5?3:2)}.`);if(!cur.solved){cur.solved=true;correctCount++;if(correctCount>=3)mark("buffers","practice");}}
+    else fb(out,"no","<b>Not quite.</b> Check which form goes on top (the unprotonated one), and whether you subtracted what the strong acid or base used up.");};
+  show.onclick=()=>{stepsBox.hidden=false;};
+  stepsBox.append(el("ol",{class:"steps",html:cur.steps.map(s=>`<li>${s}</li>`).join("")}));
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")check.click();});
+  probEl.append(el("div",{class:"q"},cur.q),el("div",{class:"row"},inp,check,show),out,stepsBox);
+}
+$("#probNew").onclick=newProb;$("#probType").addEventListener("change",newProb);newProb();
+
+/* ---------- CHECKPOINT QUIZ ---------- */
+const Q=[
+ {q:"The amino acids made in the Urey–Miller experiment were a racemic (50:50 L and D) mixture. Why is that a problem for prebiotic evolution?",o:["Proteins in living things contain only L-amino acids","Racemic amino acids cannot form peptide bonds","D-amino acids break down at high temperature","Living things use only D-amino acids"],a:0,e:"This is the homochirality problem. Making a new chiral center from achiral starting materials gives a racemic mixture, yet proteins contain only L-amino acids.",s:"origins"},
+ {q:"Why did the RNA World hypothesis gain traction?",o:["RNA is more stable than DNA","RNA can carry genetic information and also catalyze reactions","RNA was found in the Murchison meteorite","RNA does not need complementary base pairing"],a:1,e:"RNA could, in principle, encode its own sequence and catalyze its own replication. Thomas Cech's discovery of the ribozyme in 1982 gave the idea major support.",s:"origins"},
+ {q:"Carl Woese compared ribosomal RNA sequences and discovered:",o:["The endosymbiotic origin of mitochondria","The first ribozyme","The Archaea, a third domain of life","The double-helix structure of DNA"],a:2,e:"Bacteria and Archaea are both prokaryotes but distinct domains. The third domain is Eukaryota.",s:"origins"},
+ {q:"What evidence supports the endosymbiotic origin of mitochondria?",o:["Mitochondria are found only in animal cells","Mitochondria have their own circular DNA, like bacterial DNA","Mitochondria lack membranes","Mitochondria carry out photosynthesis"],a:1,e:"Lynn Margulis proposed that aerobic proteobacteria were taken in by anaerobic ancestral eukaryotes and became mitochondria. Their circular DNA is the key evidence.",s:"origins"},
+ {q:"An exam question's answer is glutamic acid, but only “glutamate” appears in the choices. What should you do?",o:["Choose glutamate: it's the same molecule in a different protonation state","Skip it: they are different amino acids","Choose glutamine instead","Choose the answer with a carboxylic acid group"],a:0,e:"Changing the protonation state doesn't change what the molecule is. Only pick by form when the question asks specifically about protonation state.",s:"groups"},
+ {q:"Where is the chemical energy of ATP stored?",o:["In its phosphoester bond","In the glycosidic bond to adenine","In its two phosphoanhydride bonds","In the ribose ring"],a:2,e:"Anhydrides store chemical energy because their hydrolysis is highly exergonic. ATP's phosphoester is a low-energy bond.",s:"groups"},
+ {q:"An enzyme speeds up a reaction. What happens to ΔG for that reaction?",o:["It becomes more negative","It stays the same","It becomes positive","It becomes zero"],a:1,e:"A catalyst lowers the activation energy, but ΔG is a state function. It depends only on the initial and final states, not the path.",s:"energy"},
+ {q:"How does the biochemical standard free energy change ΔG°′ differ from ΔG°?",o:["It is measured at 37 °C","Its standard state is pH 7 instead of 1 M H⁺","It ignores entropy","It applies only to enzyme-catalyzed reactions"],a:1,e:"1 M H⁺ would be pH 0, which would denature proteins. Biochemists use pH 7 as the standard, and the prime marks that choice.",s:"energy"},
+ {q:"Which statement best describes a living cell?",o:["Its metabolic reactions are at equilibrium (ΔG = 0)","It is at a steady state, with constant flux of metabolites through pathways","Its entropy always increases","It is a closed system"],a:1,e:"Like the waterfall pond, metabolite levels stay steady while material flows through. Equilibrium would mean death. Cells are open systems.",s:"energy"},
+ {q:"What drives the hydrophobic effect, such as micelle formation?",o:["Strong attraction between nonpolar molecules","Hydrogen bonds between the nonpolar tails","The increase in entropy of water molecules as they exclude nonpolar solutes","A large negative ΔH from covalent bond formation"],a:2,e:"Nonpolar solutes only have weak London dispersion forces between them. The process is entropically driven: water regains disorder (ΔS > 0), so −TΔS makes ΔG negative.",s:"water"},
+ {q:"Why don't lakes freeze solid from the bottom up?",o:["Ice is denser than liquid water","Ice's hexagonal lattice of four H bonds per molecule makes it less dense, and water is densest at 4 °C","Liquid water has more H bonds per molecule than ice","Dissolved salts keep the bottom liquid"],a:1,e:"Ice has 4 H bonds per molecule in an open honeycomb lattice. Liquid water averages about 3.4 (about 15% fewer) and packs more closely, so ice floats.",s:"water"},
+ {q:"Which buffer is best for an enzyme stored at pH 6.9? PIPES, pKa 6.76; H₂PO₄⁻, pKa 6.82; MOPS, pKa 7.15; acetic acid, pKa 4.76.",o:["PIPES","H₂PO₄⁻ (phosphate)","MOPS","Acetic acid"],a:1,e:"All else being equal, a buffer works best when pH = pKa. The closest pKa to 6.9 is 6.82.",s:"buffers"},
+ {q:"A student hyperventilates after seeing their MCAT score. What happens to their blood pH?",o:["It falls: respiratory acidosis","It rises: respiratory alkalosis","It stays at 7.4 because HCO₃⁻ compensates instantly","It falls because HCO₃⁻ is exhaled"],a:1,e:"In pH = 6.4 + log([HCO₃⁻]/[CO₂]), exhaling too much CO₂ shrinks the denominator, so pH rises.",s:"buffers"},
+ {q:"Acetic acid has a pKa of 4.76 and ammonium has a pKa of 9.25. Which is the stronger acid, and which conjugate base is stronger?",o:["Acetic acid; ammonia is the stronger base","Ammonium; acetate is the stronger base","Acetic acid; acetate is the stronger base","Ammonium; ammonia is the stronger base"],a:0,e:"The lower the pKa, the stronger the acid. Its conjugate base is weaker: acetate has pK_b 9.24, while ammonia has pK_b 4.75.",s:"buffers"}];
+let qi=0,qScore=0,qMissed=[],qOrder=[];
+const quiz=$("#quiz");
+function quizStart(){qOrder=Q.map((_,i)=>i);qi=0;qScore=0;qMissed=[];renderQ();}
+function renderQ(){
+  quiz.innerHTML="";
+  if(qi>=Q.length){
+    mark("checkpoint","quiz");
+    const names=Object.fromEntries(STATIONS);
+    const box=el("div",{class:"qcard"},el("div",{class:"qmeta"},"Checkpoint complete"),el("div",{class:"score"},`${qScore} / ${Q.length}`),
+      el("p",{},qScore===Q.length?"Every question correct. You're ready for the Module 0 exam material.":qScore>=Q.length*0.8?"Strong work. Review the ones you missed below.":"Revisit the stations below, then try again."));
+    if(qMissed.length){const ul=el("ul",{class:"review"});qMissed.forEach(i=>{const b=el("button",{class:"btn ghost",type:"button",style:"padding:4px 8px;margin-left:6px",onclick:()=>show(Q[i].s,true)},"Go to "+names[Q[i].s]);ul.append(el("li",{},Q[i].q.length>90?Q[i].q.slice(0,88)+"…":Q[i].q,b));});box.append(el("h3",{},"Review"),ul);}
+    box.append(el("div",{class:"row"},el("button",{class:"btn",type:"button",onclick:quizStart},"Retake checkpoint")));
+    quiz.append(box);return;}
+  const it=Q[qOrder[qi]];
+  const bar=el("div",{class:"bar"},el("i",{style:`width:${qi/Q.length*100}%`}));
+  const opts=el("div",{class:"opts"});const out=el("div");
+  const next=el("button",{class:"btn",type:"button",hidden:""},qi===Q.length-1?"See results":"Next question");
+  next.onclick=()=>{qi++;renderQ();};
+  it.o.forEach((o,j)=>{const b=el("button",{class:"opt",type:"button"},o);b.onclick=()=>{
+    [...opts.children].forEach((x,k)=>{x.disabled=true;if(k===it.a)x.classList.add("right");});
+    if(j===it.a){qScore++;fb(out,"ok","<b>Correct.</b> "+it.e);}else{b.classList.add("wrong");qMissed.push(qOrder[qi]);fb(out,"no","<b>Not quite.</b> "+it.e);}
+    next.hidden=false;next.focus();};opts.append(b);});
+  quiz.append(el("div",{class:"qcard"},bar,el("div",{class:"qmeta"},`Question ${qi+1} of ${Q.length} · Score ${qScore}`),el("div",{class:"qtext"},it.q),opts,out,el("div",{class:"row"},next)));
+}
+quizStart();
+renderProg();
+const start=(location.hash||"").slice(1);
+show(STATIONS.some(s=>s[0]===start)?start:"origins",false);
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(STATIONS.some(s=>s[0]===h))show(h,false);});
+})();
+</script>
+
+</body>
+</html>
