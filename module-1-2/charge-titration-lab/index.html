@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>CHE 5380 Module 1.2 Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: Baylor-green header band with station tabs (one per learning objective); one station panel at a time built from bench blocks. */
+:root{
+  --bg:#F2F5F1; --surface:#FFFFFF; --sunken:#E9EEE8; --ink:#13201A; --muted:#55655C; --line:#D3DCD4;
+  --accent:#154734; --accent-ink:#154734; --gold:#FFB81C; --gold-soft:#FFF2CF; --gold-ink:#7A5200;
+  --btn:#154734; --btn-ink:#FFFFFF;
+  --good:#1D7A47; --good-bg:#E2F3E8; --bad:#B42318; --bad-bg:#FCE9E7;
+  --pos:#1F5FA8; --pos-bg:#E4EEFA; --neg:#B42318; --neg-bg:#FCE9E7;
+  --band:#154734; --band-ink:#FFFFFF; --band-muted:#BFD3C8;
+  --curve:#154734; --zone:rgba(255,184,28,.22);
+  --f-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-data: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0C1410; --surface:#141F19; --sunken:#1B2921; --ink:#E6EEE8; --muted:#9CB0A4; --line:#2A3B32;
+  --accent:#2F7A57; --accent-ink:#86CDA8; --gold:#FFC23D; --gold-soft:#3A2F12; --gold-ink:#FFD47A;
+  --btn:#1F6A4A; --btn-ink:#FFFFFF;
+  --good:#63D59E; --good-bg:#123122; --bad:#FF8F85; --bad-bg:#3B1714;
+  --pos:#8CB8F0; --pos-bg:#142A44; --neg:#FF8F85; --neg-bg:#3B1714;
+  --band:#0F2E21; --band-ink:#F1F6F2; --band-muted:#9FC0AE;
+  --curve:#86CDA8; --zone:rgba(255,194,61,.16);
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0C1410; --surface:#141F19; --sunken:#1B2921; --ink:#E6EEE8; --muted:#9CB0A4; --line:#2A3B32;
+  --accent:#2F7A57; --accent-ink:#86CDA8; --gold:#FFC23D; --gold-soft:#3A2F12; --gold-ink:#FFD47A;
+  --btn:#1F6A4A; --btn-ink:#FFFFFF;
+  --good:#63D59E; --good-bg:#123122; --bad:#FF8F85; --bad-bg:#3B1714;
+  --pos:#8CB8F0; --pos-bg:#142A44; --neg:#FF8F85; --neg-bg:#3B1714;
+  --band:#0F2E21; --band-ink:#F1F6F2; --band-muted:#9FC0AE;
+  --curve:#86CDA8; --zone:rgba(255,194,61,.16);
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+header.band{background:var(--band);color:var(--band-ink)}
+header.band .wrap{padding-block:22px 0}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--band-muted);font-weight:600}
+h1{font-family:var(--f-display);font-size:clamp(26px,4.2vw,36px);line-height:1.1;margin:6px 0 6px;font-weight:800;letter-spacing:-.015em;text-wrap:balance}
+h1 .tagline{color:var(--gold);font-family:var(--f-data);font-weight:600;font-size:.56em;letter-spacing:0;vertical-align:.3em;margin-left:.35em;white-space:nowrap}
+.lede{margin:0 0 16px;color:var(--band-muted);max-width:64ch}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;margin:0 -4px;padding:0 4px}
+nav.tabs button{flex:0 0 auto;border:0;background:transparent;color:var(--band-muted);font:600 14px/1 var(--f-body);padding:12px 14px 13px;border-radius:8px 8px 0 0;cursor:pointer;display:flex;align-items:center;gap:8px}
+nav.tabs button:hover{color:var(--band-ink)}
+nav.tabs button[aria-selected="true"]{background:var(--bg);color:var(--ink)}
+nav.tabs .dot{width:9px;height:9px;border-radius:50%;border:1.5px solid currentColor;opacity:.7}
+nav.tabs .dot.done{background:var(--gold);border-color:var(--gold);opacity:1}
+main .wrap{padding-block:22px 48px}
+section.station{display:grid;gap:18px}
+.st-head{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between}
+h2{font-family:var(--f-display);font-size:24px;line-height:1.2;margin:0;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+.lo{font-size:14px;color:var(--ink);background:var(--gold-soft);border-left:4px solid var(--gold);padding:8px 12px;border-radius:0 8px 8px 0;max-width:72ch}
+.lo b{color:var(--gold-ink)}
+.src{font-size:13px;color:var(--muted)}
+.progress{font:600 12px/1 var(--f-data);color:var(--muted);background:var(--sunken);padding:6px 9px;border-radius:999px;white-space:nowrap}
+.progress.done{background:var(--gold-soft);color:var(--gold-ink)}
+.bench{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;min-width:0}
+.bench h3{margin:0;font-size:17px;font-weight:750;font-family:var(--f-display)}
+.bench p{margin:0;max-width:68ch}
+.hint{color:var(--muted);font-size:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{appearance:none;border:1px solid var(--btn);background:var(--btn);color:var(--btn-ink);font:600 14px/1 var(--f-body);padding:10px 14px;border-radius:8px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent-ink);border-color:var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chip{appearance:none;border:1px solid var(--line);background:var(--sunken);color:var(--ink);font:500 14px/1.3 var(--f-body);padding:9px 12px;border-radius:8px;cursor:pointer;text-align:left}
+.chip:hover{border-color:var(--accent-ink)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.fb{border-radius:8px;padding:10px 12px;font-size:14px}
+.fb.ok{background:var(--good-bg);color:var(--good)}
+.fb.no{background:var(--bad-bg);color:var(--bad)}
+.fb.info{background:var(--gold-soft);color:var(--gold-ink)}
+.mono{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+select,input[type="text"]{font:500 14px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:8px 9px;max-width:100%}
+input[type="range"]{width:100%;accent-color:var(--accent)}
+label.ctl{display:grid;gap:4px;font-size:13px;color:var(--muted);font-weight:600}
+label.ctl .val{font-family:var(--f-data);color:var(--ink);font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--surface);color:var(--ink);font:500 13px var(--f-body);padding:8px 10px;cursor:pointer;border-left:1px solid var(--line)}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+
+/* drill */
+.drill{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:640px){.drill{grid-template-columns:1fr}}
+.mol{background:var(--sunken);border-radius:8px;min-height:190px;display:grid;place-items:center;padding:10px;color:var(--ink)}
+.mol svg{max-width:100%;height:auto;display:block}
+.bigcode{font:800 64px/1 var(--f-display);color:var(--accent-ink)}
+.bigname{font:800 22px/1.2 var(--f-display);text-align:center}
+.qtext{font:700 17px/1.35 var(--f-display);max-width:60ch;text-wrap:pretty}
+.opts{display:grid;gap:8px}
+.opts.cols{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.opt{appearance:none;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 15px/1.35 var(--f-body);padding:11px 13px;border-radius:8px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent-ink)}
+.opt.right{border-color:var(--good);background:var(--good-bg);color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
+.opt:disabled{cursor:default}
+.stats{display:flex;flex-wrap:wrap;gap:6px 14px;font:600 13px var(--f-data);color:var(--muted)}
+.mastery{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+@media (max-width:520px){.mastery{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.mastery span{font:700 13px/1 var(--f-data);text-align:center;padding:8px 0;border-radius:6px;background:var(--sunken);color:var(--muted);border:1px solid var(--line)}
+.mastery span.got{background:var(--good-bg);color:var(--good);border-color:transparent}
+details.study{border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+details.study summary{cursor:pointer;padding:14px 18px;font:750 17px var(--f-display)}
+details.study .inner{padding:0 18px 18px;display:grid;gap:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:6px;align-content:start}
+.card .mol{min-height:150px;padding:6px}
+.card .nm{font:750 15px var(--f-display)}
+.card .meta{font-size:12.5px;color:var(--muted);line-height:1.4}
+.card.hide-names .nm,.card.hide-names .codes{filter:blur(6px);cursor:pointer}
+.tag{display:inline-block;font:700 11px/1 var(--f-body);letter-spacing:.04em;padding:4px 7px;border-radius:999px;background:var(--sunken);color:var(--ink);border:1px solid var(--line)}
+.tag.np{background:var(--sunken)}
+.tag.pu{background:var(--gold-soft);color:var(--gold-ink);border-color:transparent}
+.tag.pos{background:var(--pos-bg);color:var(--pos);border-color:transparent}
+.tag.neg{background:var(--neg-bg);color:var(--neg);border-color:transparent}
+
+/* fischer */
+.fischer{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:640px){.fischer{grid-template-columns:1fr}}
+.fbox{background:var(--sunken);border-radius:8px;padding:8px}
+.fl{fill:var(--ink);font-size:17px;font-family:var(--f-data);font-weight:600}
+.fb-line{stroke:var(--ink);stroke-width:2.5}
+.badge{fill:var(--gold)}
+.badgeT{fill:#3A2600;font:700 13px var(--f-body)}
+.ans{display:flex;gap:10px}
+.ans .btn{font-size:22px;padding:14px 28px;font-family:var(--f-display)}
+ol.steps{margin:0;padding-left:1.3em;display:grid;gap:4px;font-size:14px}
+
+/* charge */
+table.gt{width:100%;border-collapse:collapse;font-size:14px}
+table.gt th,table.gt td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.gt th{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+table.gt td.num{font-family:var(--f-data);font-variant-numeric:tabular-nums;white-space:nowrap}
+.q{display:inline-block;min-width:2.6em;text-align:center;font:700 13px var(--f-data);padding:3px 6px;border-radius:6px}
+.q.p{background:var(--pos-bg);color:var(--pos)} .q.n{background:var(--neg-bg);color:var(--neg)} .q.z{background:var(--sunken);color:var(--muted)}
+.tblwrap{overflow-x:auto}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.readout div{background:var(--sunken);border-radius:8px;padding:10px 12px}
+.readout small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.readout span{font:700 18px var(--f-data);font-variant-numeric:tabular-nums}
+.formula{font-family:var(--f-data);font-size:14.5px;background:var(--sunken);padding:10px 12px;border-radius:8px;overflow-x:auto;white-space:nowrap}
+.seqrow{display:flex;flex-wrap:wrap;gap:4px}
+.seqrow button{font:700 13px var(--f-data);width:34px;height:34px;border-radius:7px;border:1px solid var(--line);background:var(--sunken);color:var(--ink);cursor:pointer}
+.seqrow button.ion{border-color:var(--gold);}
+svg text{font-family:var(--f-body)}
+.ax{stroke:var(--line);stroke-width:1}
+.ax0{stroke:var(--muted);stroke-width:1.2}
+.axl{fill:var(--muted);font-size:12px}
+@media (max-width:600px){.axl,.pkalbl,.pilbl{font-size:20px}}
+.curve{fill:none;stroke:var(--curve);stroke-width:2.5}
+.step{fill:none;stroke:var(--gold);stroke-width:2;stroke-dasharray:6 4}
+.pkaline{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:5 4}
+.pkalbl{fill:var(--gold-ink);font-size:12px;font-weight:700}
+.pimark{stroke:var(--accent-ink);stroke-width:1.5;stroke-dasharray:2 3}
+.pilbl{fill:var(--accent-ink);font-size:12px;font-weight:700}
+.marker{fill:var(--gold);stroke:var(--ink);stroke-width:1.5}
+.cursor{stroke:var(--ink);stroke-width:1.2;opacity:.5}
+.prob{background:var(--sunken);border-radius:8px;padding:14px;display:grid;gap:10px}
+.prob .q2{font-size:15px;max-width:70ch}
+
+/* quiz */
+.qcard{display:grid;gap:12px}
+.qmeta{font:600 12px var(--f-data);color:var(--muted)}
+.bar{height:6px;background:var(--sunken);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);transition:width .3s}
+.score{font:800 44px var(--f-display);color:var(--accent-ink)}
+ul.review{margin:0;padding-left:1.2em;display:grid;gap:6px}
+footer{color:var(--muted);font-size:13px;padding-top:6px}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+
+/* module 1.2 additions */
+.opts.five{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:520px){.opts.five{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.opts.five .opt{text-align:center;font:700 17px/1 var(--f-data);padding:14px 6px}
+.nlwrap{background:var(--sunken);border-radius:8px;padding:8px 6px 4px}
+.reg-l{fill:var(--pos-bg)} .reg-r{fill:var(--neg-bg)} .reg-g{fill:url(#hatch)}
+.reg-l.base{fill:var(--pos-bg)} .reg-r.base{fill:var(--sunken)}
+.reg-l.acid{fill:var(--sunken)} .reg-r.acid{fill:var(--neg-bg)}
+.hatch-line{stroke:var(--line);stroke-width:2}
+.nlt{fill:var(--ink);font-size:13px;font-weight:600}
+.nlm{fill:var(--muted);font-size:12px}
+.pkl{stroke:var(--gold);stroke-width:2.5}
+.phm{fill:var(--ink)}
+@media (max-width:600px){.nlt,.nlm{font-size:19px}}
+.draw{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:700px){.draw{grid-template-columns:1fr}}
+.dbox{background:var(--sunken);border-radius:8px;padding:8px;color:var(--ink)}
+.dbox svg{display:block;width:100%;height:auto;max-height:340px}
+.dt{fill:var(--ink);font:600 17px var(--f-data)}
+.dt.ion{font-weight:800}
+.dl{stroke:var(--ink);stroke-width:1.6}
+.qb{font:800 12px var(--f-data)}
+.qb-p{fill:var(--pos)} .qb-n{fill:var(--neg)}
+.qbg-p{fill:var(--pos-bg)} .qbg-n{fill:var(--neg-bg)}
+.ionbox{fill:none;stroke:var(--gold);stroke-width:2;stroke-dasharray:4 3;rx:6}
+.ionbox.ok{stroke:var(--good);stroke-dasharray:none}
+.ionbox.bad{stroke:var(--bad);stroke-dasharray:none}
+.gpick{display:grid;gap:10px}
+.gpick .grow{display:grid;gap:6px}
+.gpick .glab{font-size:13px;font-weight:700;color:var(--muted)}
+.gpick .seg button{font-family:var(--f-data);font-size:14px;padding:9px 12px}
+.gpick .seg button sup{font-size:.75em}
+.mark-ok{color:var(--good);font-weight:700} .mark-no{color:var(--bad);font-weight:700}
+.toggle{display:inline-flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);font-weight:600;cursor:pointer}
+.toggle input{accent-color:var(--accent);width:16px;height:16px}
+.callout{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 12px;font-size:14px;max-width:72ch;background:var(--surface)}
+.fcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.fcard{border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;gap:6px;align-content:start;background:var(--surface)}
+.fcard .ff{font:700 16px var(--f-data);color:var(--accent-ink)}
+.fcard .fw{font-size:13px;color:var(--muted)}
+.fcard .fa{font:700 14px var(--f-data)}
+.rungs{fill:none}
+.lad-z{fill:var(--zone)}
+.lad-q{font:800 14px var(--f-data)}
+.lad-q.p{fill:var(--pos)} .lad-q.n{fill:var(--neg)} .lad-q.z{fill:var(--gold-ink)}
+.lad-pk{fill:var(--muted);font:600 12px var(--f-data)}
+@media (max-width:600px){.lad-q{font-size:19px}.lad-pk{font-size:17px}}
+.yn{display:flex;gap:10px}
+.yn .btn{min-width:90px;font-size:16px}
+.cluebox{font-size:14px;background:var(--surface);border:1px dashed var(--line);border-radius:8px;padding:8px 12px}
+
+label.ctl{min-width:0}
+label.ctl select{width:100%;min-width:0}
+.bench>*{min-width:0}
+</style>
+</head>
+<body>
+
+<header class="band">
+  <div class="wrap">
+    <div class="eyebrow">CHE 5380 · Principles of Biochemistry · Module 1.2</div>
+    <h1>Charge &amp; Titration Lab <span class="tagline" aria-hidden="true">pH = pKa → ±½</span></h1>
+    <p class="lede">We practice net charge, polypeptides, titration curves and pI using the rules of thumb from the Part 2 videos. Each station matches one learning objective. Nothing here is graded or saved.</p>
+    <nav class="tabs" role="tablist" aria-label="Stations" id="tabs"></nav>
+  </div>
+</header>
+
+<main><div class="wrap">
+
+<!-- ===== STATION 1: RULES OF THUMB ===== -->
+<section class="station" id="rules" role="tabpanel" aria-labelledby="tab-rules">
+  <div class="st-head"><h2>Rules of thumb</h2><span class="progress" data-prog="rules"></span></div>
+  <p class="lo"><b>Objective 1.</b> Classify each ionizable group as weakly acidic or weakly basic, and use pH versus pKa to assign its charge.</p>
+  <div class="bench">
+    <h3>Where is the pH relative to the pKa?</h3>
+    <p class="hint">Weakly acidic groups go from HA (0) to A⁻ (−1). Weakly basic groups go from HA⁺ (+1) to A (0, N with a lone pair). The pKa is the dividing line: below it the acid form predominates, above it the base form does.</p>
+    <div class="row">
+      <label class="ctl" style="min-width:min(100%,320px)">Ionizable group
+        <select id="rGroup"></select>
+      </label>
+    </div>
+    <label class="ctl">pH <span class="val" id="rPHv"></span><input type="range" id="rPH" min="0" max="14" step="0.1" value="7"></label>
+    <div class="nlwrap"><svg id="rSvg" viewBox="0 0 640 150" width="100%" role="img" aria-label="pH number line with the pKa marked"></svg></div>
+    <div class="readout" id="rRead"></div>
+    <div id="rNote" aria-live="polite"></div>
+  </div>
+
+  <div class="bench">
+    <h3>Charge drill</h3>
+    <p class="hint">Each question names one group and a pH. Pick the charge that group carries. Use the instructor's pKas from memory.</p>
+    <div id="rDrill"></div>
+    <div class="stats" id="rStats"></div>
+  </div>
+</section>
+
+<!-- ===== STATION 2: DRAW IT ===== -->
+<section class="station" id="draw" role="tabpanel" aria-labelledby="tab-draw" hidden>
+  <div class="st-head"><h2>Draw an amino acid at any pH</h2><span class="progress" data-prog="draw"></span></div>
+  <p class="lo"><b>Objective 2.</b> Draw an amino acid with the correct protonation state at a given pH and calculate its net charge.</p>
+  <div class="bench">
+    <p class="hint">Start from the pH 7 structure, then set each ionizable group (dashed gold box) to the form it takes at the new pH. At pH = pKa, we draw the charged form and mark it ½. Then add up the charges.</p>
+    <div class="row" style="justify-content:space-between">
+      <div class="row" id="dEx"></div>
+      <label class="toggle"><input type="checkbox" id="dShowPK" checked> Show pKa values</label>
+    </div>
+    <div class="qtext" id="dQ"></div>
+    <div class="draw">
+      <div class="dbox"><svg id="dSvg" viewBox="0 0 300 300" role="img" aria-label="Amino acid structure"></svg></div>
+      <div style="display:grid;gap:14px;align-content:start">
+        <div class="gpick" id="dPick"></div>
+        <div class="row">
+          <label class="ctl">Net charge <input type="text" id="dNet" inputmode="decimal" size="8" placeholder="e.g. +½" autocomplete="off"></label>
+          <button class="btn" id="dCheck" style="align-self:end">Check drawing</button>
+          <button class="btn ghost" id="dShow" style="align-self:end">Show solution</button>
+        </div>
+        <div id="dFb" aria-live="polite"></div>
+        <div class="row"><button class="btn ghost" id="dNew">New amino acid</button></div>
+      </div>
+    </div>
+    <div class="stats" id="dStats"></div>
+  </div>
+</section>
+
+<!-- ===== STATION 3: POLYPEPTIDES ===== -->
+<section class="station" id="peptide" role="tabpanel" aria-labelledby="tab-peptide" hidden>
+  <div class="st-head"><h2>Net charge of a polypeptide</h2><span class="progress" data-prog="peptide"></span></div>
+  <p class="lo"><b>Objective 3.</b> Calculate the net charge on a polypeptide at a given pH, using the shifted pKas of the free N- and C-termini.</p>
+  <div class="callout">In a polypeptide, only the free <b>N-terminus</b> (left), the free <b>C-terminus</b> (right) and ionizable side chains count. The termini sit next to amides now, so their pKas shift: <b>N-terminal α-NH₃⁺ 9.5 → 8.5</b> and <b>C-terminal α-COOH 2.5 → 3.5</b>.</div>
+  <div class="bench">
+    <h3>Peptide explorer</h3>
+    <p class="hint">Type a one-letter sequence, N-terminus on the left. We list every weakly acidic and weakly basic group, apply the rule of thumb to each, then add.</p>
+    <div class="row">
+      <label class="ctl">Sequence <input type="text" id="pSeq" value="AEGK" maxlength="10" size="12" autocomplete="off" spellcheck="false" style="font-family:var(--f-data);text-transform:uppercase;letter-spacing:.08em"></label>
+      <label class="ctl">pH <input type="number" id="pPH" value="12.5" min="0" max="14" step="0.5" style="width:6em;font:500 14px var(--f-data);padding:8px 9px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--ink)"></label>
+      <div class="row" id="pEx" style="align-self:end"></div>
+    </div>
+    <div id="pErr" aria-live="polite"></div>
+    <div class="tblwrap"><table class="gt" id="pTable"></table></div>
+    <div class="readout" id="pRead"></div>
+    <div id="pNote" aria-live="polite"></div>
+  </div>
+  <div class="bench">
+    <h3>Peptide practice</h3>
+    <div class="prob" id="pp"></div>
+    <div class="row"><button class="btn ghost" id="ppNew">New peptide</button></div>
+  </div>
+</section>
+
+<!-- ===== STATION 4: TITRATION ===== -->
+<section class="station" id="titration" role="tabpanel" aria-labelledby="tab-titration" hidden>
+  <div class="st-head"><h2>Titration curves</h2><span class="progress" data-prog="titration"></span></div>
+  <p class="lo"><b>Objective 4.</b> Follow the net charge through an amino acid titration and identify an amino acid or peptide from its curve.</p>
+  <div class="bench">
+    <h3>Walk through a titration</h3>
+    <p class="hint">We start at very low pH, where everything is protonated, and add strong base. Groups are titrated from lowest pKa to highest, so the α-COOH always goes first. Each half-equivalent of OH⁻ lowers the net charge by ½. The total equivalents equal the number of weakly acidic and basic groups.</p>
+    <div class="row">
+      <label class="ctl" style="min-width:min(100%,300px)">Species
+        <select id="tSel">
+          <option value="G">Glycine (no pKR)</option>
+          <option value="E">Glutamic acid (weakly acidic side chain)</option>
+          <option value="K">Lysine (weakly basic side chain)</option>
+          <option value="Y">Tyrosine (the exception)</option>
+          <option value="H">Histidine</option>
+          <option value="AEGK">Ala–Glu–Gly–Lys (video peptide)</option>
+        </select>
+      </label>
+    </div>
+    <div style="overflow-x:auto"><svg id="tSvg" viewBox="0 0 640 370" width="100%" role="img" aria-label="Titration curve"></svg></div>
+    <label class="ctl">Equivalents of OH⁻ added <span class="val" id="teqv"></span><input type="range" id="teq" min="0" max="2" step="0.5" value="0"></label>
+    <div class="readout" id="tRead"></div>
+    <div class="tblwrap"><table class="gt" id="tTable"></table></div>
+    <div id="tNote" aria-live="polite"></div>
+  </div>
+
+  <div class="bench">
+    <h3>Mystery curve</h3>
+    <p class="hint">Read the pH at each half-equivalence point (0.5, 1.5, 2.5 …) to get the pKas. The first is always the α-COOH and one is always the α-NH₃⁺; whatever is left belongs to a side chain.</p>
+    <div style="overflow-x:auto"><svg id="mSvg" viewBox="0 0 640 370" width="100%" role="img" aria-label="Mystery titration curve"></svg></div>
+    <label class="ctl">Equivalents of OH⁻ to read <span class="val" id="meqv"></span><input type="range" id="meq" min="0" max="2" step="0.5" value="0.5"></label>
+    <div class="readout" id="mRead"></div>
+    <div id="mClue"></div>
+    <div class="qtext" id="mQ"></div>
+    <div id="mOpts"></div>
+    <div id="mFb" aria-live="polite"></div>
+    <div class="row"><button class="btn ghost" id="mNew">New mystery curve</button></div>
+    <div class="stats" id="mStats"></div>
+  </div>
+</section>
+
+<!-- ===== STATION 5: pI ===== -->
+<section class="station" id="pi" role="tabpanel" aria-labelledby="tab-pi" hidden>
+  <div class="st-head"><h2>Isoelectric point (pI)</h2><span class="progress" data-prog="pi"></span></div>
+  <p class="lo"><b>Objective 5.</b> Calculate the pI of any of the 20 amino acids and of a small polypeptide.</p>
+  <div class="bench">
+    <h3>The zero sits between +1 and −1</h3>
+    <p class="hint">The pI is the pH where net charge is 0. That 0 form always sits between the +1 and −1 forms, so the pI is the average of the two pKas on either side of it.</p>
+    <div class="fcards" id="fcards"></div>
+  </div>
+  <div class="bench">
+    <h3>Charge ladder</h3>
+    <p class="hint">Type one amino acid or a short peptide. We start fully protonated at the left and drop one charge at each pKa.</p>
+    <div class="row">
+      <label class="ctl">Sequence <input type="text" id="lSeq" value="Y" maxlength="10" size="12" autocomplete="off" spellcheck="false" style="font-family:var(--f-data);text-transform:uppercase;letter-spacing:.08em"></label>
+      <div class="row" id="lEx" style="align-self:end"></div>
+    </div>
+    <div id="lErr" aria-live="polite"></div>
+    <div style="overflow-x:auto"><svg id="lSvg" viewBox="0 0 640 170" width="100%" role="img" aria-label="Charge ladder across pH"></svg></div>
+    <div class="formula" id="lF" style="white-space:normal;line-height:1.6"></div>
+  </div>
+  <div class="bench">
+    <h3>pI practice</h3>
+    <div class="row">
+      <label class="ctl">Problem type
+        <select id="ipType">
+          <option value="mix">Mixed</option>
+          <option value="formula">Which formula?</option>
+          <option value="aa">pI of an amino acid</option>
+          <option value="pep">pI of a peptide</option>
+        </select>
+      </label>
+      <button class="btn ghost" id="ipNew" style="align-self:end">New problem</button>
+    </div>
+    <div class="prob" id="ip"></div>
+  </div>
+</section>
+
+<!-- ===== CHECKPOINT ===== -->
+<section class="station" id="checkpoint" role="tabpanel" aria-labelledby="tab-checkpoint" hidden>
+  <div class="st-head"><h2>Module 1.2 checkpoint</h2><span class="progress" data-prog="checkpoint"></span></div>
+  <p class="src">Exam-style questions modeled on the examples in the Part 2 videos. Each answer comes with an explanation.</p>
+  <div class="bench" id="quiz"></div>
+</section>
+
+<footer>Built from the CHE 5380 Module 1.2 amino acid videos (net charge; titration and pI) and the Amino Acid Structure Quiz information. pKa values are your instructor's rounded values: α-COOH 2.5 and α-NH₃⁺ 9.5 on free amino acids; C-terminal α-COOH 3.5 and N-terminal α-NH₃⁺ 8.5 in peptides; side-chain pKR Asp/Glu 4, His 6, Cys 8.5, Lys/Tyr 10.5, Arg 12.5. When a question gives different values, use those.</footer>
+</div></main>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const el=(tag,attrs={},...kids)=>{const e=document.createElement(tag);for(const k in attrs){if(k==="class")e.className=attrs[k];else if(k==="html")e.innerHTML=attrs[k];else if(k.startsWith("on"))e.addEventListener(k.slice(2),attrs[k]);else e.setAttribute(k,attrs[k]);}kids.flat().forEach(c=>e.append(c&&c.nodeType?c:document.createTextNode(c??"")));return e;};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const fb=(node,kind,html)=>{node.innerHTML=html?`<div class="fb ${kind}">${html}</div>`:"";};
+const fix=(x,d=2)=>Number(x).toFixed(d);
+const fmtN=x=>String(+Number(x).toFixed(2));
+const EPS=1e-6;
+/* charge formatting: halves shown as ½ */
+const fq=q=>{const r=Math.round(q*2)/2;if(Math.abs(q-r)>0.01)return(q>0?"+":q<0?"−":"")+Math.abs(q).toFixed(2);if(r===0)return"0";const s=r>0?"+":"−",a=Math.abs(r),w=Math.floor(a),h=a-w>0.25;return s+(w?w:"")+(h?"½":"");};
+const parseNum=v=>{v=String(v).trim().replace(/\s+/g,"").replace(/,/g,".").replace(/[−–]/g,"-").replace(/½/g,".5").replace(/^\+/,"");if(/^-?\d*\.?\d+\/\d*\.?\d+$/.test(v)){const neg=v.startsWith("-");const[a,b]=v.replace("-","").split("/").map(Number);return(neg?-1:1)*a/b;}return v===""?NaN:Number(v);};
+const qBadge=q=>`<span class="q ${q>0.001?"p":q<-0.001?"n":"z"}">${fq(q)}</span>`;
+
+/* ---------- data ---------- */
+// side-chain kinds: sC carboxylic acid, SH thiol, OH phenol, sN amine, Im imidazole, Gua guanidinium
+const AA=[
+ {c:"G",c3:"Gly",n:"Glycine",chain:["H"]},
+ {c:"A",c3:"Ala",n:"Alanine",chain:["CH₃"]},
+ {c:"V",c3:"Val",n:"Valine",chain:["CH(CH₃)₂"]},
+ {c:"L",c3:"Leu",n:"Leucine",chain:["CH₂","CH(CH₃)₂"]},
+ {c:"I",c3:"Ile",n:"Isoleucine",chain:["CH–CH₃","CH₂","CH₃"]},
+ {c:"M",c3:"Met",n:"Methionine",chain:["CH₂","CH₂","S","CH₃"]},
+ {c:"F",c3:"Phe",n:"Phenylalanine",chain:["CH₂","C₆H₅"]},
+ {c:"W",c3:"Trp",n:"Tryptophan",chain:["CH₂","indole"]},
+ {c:"P",c3:"Pro",n:"Proline",chain:null},
+ {c:"S",c3:"Ser",n:"Serine",chain:["CH₂","OH"]},
+ {c:"T",c3:"Thr",n:"Threonine",chain:["CH–OH","CH₃"]},
+ {c:"N",c3:"Asn",n:"Asparagine",chain:["CH₂","C(=O)NH₂"]},
+ {c:"Q",c3:"Gln",n:"Glutamine",chain:["CH₂","CH₂","C(=O)NH₂"]},
+ {c:"Y",c3:"Tyr",n:"Tyrosine",pk:10.5,t:"acid",k:"OH",fg:"phenol",chain:["CH₂","C₆H₄","*"]},
+ {c:"C",c3:"Cys",n:"Cysteine",pk:8.5,t:"acid",k:"SH",fg:"thiol",chain:["CH₂","*"]},
+ {c:"D",c3:"Asp",n:"Aspartic acid",pk:4,t:"acid",k:"sC",fg:"carboxylic acid",chain:["CH₂","*"]},
+ {c:"E",c3:"Glu",n:"Glutamic acid",pk:4,t:"acid",k:"sC",fg:"carboxylic acid",chain:["CH₂","CH₂","*"]},
+ {c:"K",c3:"Lys",n:"Lysine",pk:10.5,t:"base",k:"sN",fg:"amine",chain:["CH₂","CH₂","CH₂","CH₂","*"]},
+ {c:"R",c3:"Arg",n:"Arginine",pk:12.5,t:"base",k:"Gua",fg:"guanidinium",chain:["CH₂","CH₂","CH₂","NH","*"]},
+ {c:"H",c3:"His",n:"Histidine",pk:6,t:"base",k:"Im",fg:"imidazole",chain:["CH₂","*"]}];
+const BY=Object.fromEntries(AA.map(a=>[a.c,a]));
+const IONIZ=AA.filter(a=>a.pk!=null).map(a=>a.c);
+const NOPKR=AA.filter(a=>a.pk==null).map(a=>a.c);
+// forms: [protonated, half, deprotonated]; text + charge badge
+const FORMS={
+ aN:[["H₃N","+"],["H₃N","+½"],["H₂N",""]],
+ aC:[["COOH",""],["COO","−½"],["COO","−"]],
+ sC:[["COOH",""],["COO","−½"],["COO","−"]],
+ SH:[["SH",""],["S","−½"],["S","−"]],
+ OH:[["OH",""],["O","−½"],["O","−"]],
+ sN:[["NH₃","+"],["NH₃","+½"],["NH₂",""]],
+ Im:[["Im–H","+"],["Im–H","+½"],["Im",""]],
+ Gua:[["C(NH₂)₂","+"],["C(NH₂)₂","+½"],["C(=NH)NH₂",""]]};
+const formHTML=(k,i)=>{const[t,c]=FORMS[k][i];return t+(c?`<sup>${c}</sup>`:"");};
+
+/* ---------- charge model ---------- */
+function groupsOf(seq){const g=[];const single=seq.length===1;
+  g.push({lab:single?"α-NH₃⁺ (α-amino)":`N-terminal α-NH₃⁺ (${BY[seq[0]].c3}1)`,pk:single?9.5:8.5,t:"base",k:"aN",term:!single});
+  [...seq].forEach((c,i)=>{const a=BY[c];if(a.pk!=null)g.push({lab:`${a.c3}${single?"":i+1} side chain (${a.fg})`,pk:a.pk,t:a.t,k:a.k,aa:a});});
+  g.push({lab:single?"α-COOH (α-carboxyl)":`C-terminal α-COOH (${BY[seq[seq.length-1]].c3}${seq.length})`,pk:single?2.5:3.5,t:"acid",k:"aC",term:!single});
+  return g;}
+// rule of thumb; returns null inside the ±1 gray zone
+const zone=(g,ph)=>{const d=ph-g.pk;if(Math.abs(d)<EPS)return"eq";if(d<=-1+EPS)return"below";if(d>=1-EPS)return"above";return"gray";};
+const qRule=(g,ph)=>{const z=zone(g,ph);if(z==="gray")return null;const i=z==="below"?0:z==="eq"?1:2;return g.t==="base"?[1,.5,0][i]:[0,-.5,-1][i];};
+const formIdx=(g,ph)=>({below:0,eq:1,above:2})[zone(g,ph)];
+const qExact=(g,ph)=>g.t==="base"?1/(1+10**(ph-g.pk)):-1/(1+10**(g.pk-ph));
+const netRule=(gs,ph)=>gs.reduce((s,g)=>s+qRule(g,ph),0);
+function piOf(gs){const pks=gs.map(g=>g.pk).sort((a,b)=>a-b);const nb=gs.filter(g=>g.t==="base").length;return{pks,nb,pi:(pks[nb-1]+pks[nb])/2,lo:pks[nb-1],hi:pks[nb]};}
+const PH_LIST=[];for(let p=0.5;p<=13.51;p+=0.5)PH_LIST.push(+p.toFixed(1));
+const examSafe=(gs,p)=>gs.every(g=>zone(g,p)!=="gray");
+function examPH(gs,eqChance=0.35){const pk=[...new Set(gs.map(g=>g.pk))].filter(p=>examSafe(gs,p));if(pk.length&&Math.random()<eqChance)return pick(pk);const ok=PH_LIST.filter(p=>examSafe(gs,p));return pick(ok);}
+const seqName=s=>[...s].map(c=>BY[c].c3).join("–");
+const relTxt=(g,ph)=>{const z=zone(g,ph),d=Math.abs(ph-g.pk);return z==="eq"?"pH = pKa":z==="gray"?`within 1 of the pKa`:`${fmtN(d)} ${z==="below"?"below":"above"}`;};
+const formWords=(g,i)=>g.t==="base"?["protonated HA⁺","half HA⁺, half A","deprotonated A"][i]:["protonated HA","half HA, half A⁻","deprotonated A⁻"][i];
+
+/* ---------- tabs + progress ---------- */
+const STATIONS=[["rules","Rules of thumb"],["draw","Draw it"],["peptide","Polypeptides"],["titration","Titration"],["pi","pI"],["checkpoint","Checkpoint"]];
+const tasks={rules:["streak"],draw:["three"],peptide:["three"],titration:["mys"],pi:["three"],checkpoint:["quiz"]};
+const taskLabel={rules:{streak:"6 in a row"},draw:{three:"3 correct drawings"},peptide:{three:"3 problems"},titration:{mys:"solve 2 mystery curves"},pi:{three:"3 problems"},checkpoint:{quiz:"finish the quiz"}};
+const done=new Set();
+STATIONS.forEach(([id,label],i)=>$("#tabs").append(el("button",{role:"tab","aria-selected":"false","aria-controls":id,id:"tab-"+id,tabindex:"-1",onclick:()=>show(id,true)},el("span",{class:"dot","data-dot":id}),label)));
+$("#tabs").addEventListener("keydown",e=>{const ids=STATIONS.map(s=>s[0]);const cur=ids.findIndex(id=>$("#tab-"+id).getAttribute("aria-selected")==="true");let n=null;
+  if(e.key==="ArrowRight")n=(cur+1)%ids.length;else if(e.key==="ArrowLeft")n=(cur-1+ids.length)%ids.length;else if(e.key==="Home")n=0;else if(e.key==="End")n=ids.length-1;
+  if(n!=null){e.preventDefault();show(ids[n],true);$("#tab-"+ids[n]).focus();}});
+function show(id,push){STATIONS.forEach(([s])=>{$("#"+s).hidden=s!==id;const t=$("#tab-"+s);t.setAttribute("aria-selected",String(s===id));t.setAttribute("tabindex",s===id?"0":"-1");});
+  if(push){try{history.replaceState(null,"","#"+id);}catch(e){}}
+  if(id==="titration"){drawT();drawM();}if(id==="pi")renderLadder();if(id==="rules")renderRules();if(id==="peptide")renderPep();}
+function mark(s,t){done.add(s+":"+t);renderProg();}
+function renderProg(){for(const s in tasks){const t=tasks[s],n=t.filter(x=>done.has(s+":"+x)).length;const p=document.querySelector(`[data-prog="${s}"]`);p.textContent=n===t.length?"Station complete":"Goal: "+t.map(x=>taskLabel[s][x]).join(", ");p.classList.toggle("done",n===t.length);document.querySelector(`[data-dot="${s}"]`).classList.toggle("done",n===t.length);}}
+
+/* ---------- STATION 1: rules ---------- */
+const RGROUPS=[
+ {lab:"α-COOH, free amino acid",pk:2.5,t:"acid",k:"aC"},
+ {lab:"C-terminal COOH, peptide",pk:3.5,t:"acid",k:"aC"},
+ {lab:"Asp / Glu side-chain COOH",pk:4,t:"acid",k:"sC"},
+ {lab:"Cys thiol (SH)",pk:8.5,t:"acid",k:"SH"},
+ {lab:"Tyr phenol (OH)",pk:10.5,t:"acid",k:"OH"},
+ {lab:"His imidazole",pk:6,t:"base",k:"Im"},
+ {lab:"N-terminal α-NH₃⁺, peptide",pk:8.5,t:"base",k:"aN"},
+ {lab:"α-NH₃⁺, free amino acid",pk:9.5,t:"base",k:"aN"},
+ {lab:"Lys side-chain NH₃⁺",pk:10.5,t:"base",k:"sN"},
+ {lab:"Arg guanidinium",pk:12.5,t:"base",k:"Gua"}];
+RGROUPS.forEach((g,i)=>$("#rGroup").append(el("option",{value:i},`${g.lab} · pKa ${g.pk}`)));
+$("#rGroup").value="8";$("#rPH").value="12.5";
+function renderRules(){
+  const g=RGROUPS[+$("#rGroup").value],ph=+$("#rPH").value;$("#rPHv").textContent=fix(ph,1);
+  const X0=24,X1=616,xs=p=>X0+(X1-X0)*p/14;const lo=Math.max(0,g.pk-1),hi=Math.min(14,g.pk+1);
+  const acidF=g.t==="acid"?["HA (0)","A⁻ (−1)"]:["HA⁺ (+1)","A (0)"];
+  let s=`<defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line class="hatch-line" x1="0" y1="0" x2="0" y2="8"/></pattern></defs>`;
+  s+=`<rect class="reg-l ${g.t}" x="${xs(0)}" y="34" width="${xs(lo)-xs(0)}" height="44"/><rect class="reg-g" x="${xs(lo)}" y="34" width="${xs(hi)-xs(lo)}" height="44"/><rect class="reg-r ${g.t}" x="${xs(hi)}" y="34" width="${xs(14)-xs(hi)}" height="44"/>`;
+  if(xs(lo)-xs(0)>70)s+=`<text class="nlt" x="${(xs(0)+xs(lo))/2}" y="61" text-anchor="middle">${acidF[0]}</text>`;
+  if(xs(14)-xs(hi)>70)s+=`<text class="nlt" x="${(xs(hi)+xs(14))/2}" y="61" text-anchor="middle">${acidF[1]}</text>`;
+  s+=`<line class="pkl" x1="${xs(g.pk)}" x2="${xs(g.pk)}" y1="26" y2="86"/><text class="nlt" x="${xs(g.pk)}" y="20" text-anchor="middle">pKa ${g.pk}</text>`;
+  for(let p=0;p<=14;p+=2)s+=`<line class="ax" x1="${xs(p)}" x2="${xs(p)}" y1="78" y2="84"/><text class="nlm" x="${xs(p)}" y="100" text-anchor="middle">${p}</text>`;
+  s+=`<path class="phm" d="M${xs(ph)} 112 l-8 14 h16 z"/><text class="nlt" x="${Math.min(590,Math.max(40,xs(ph)))}" y="144" text-anchor="middle">pH ${fix(ph,1)}</text>`;
+  $("#rSvg").innerHTML=s;
+  const z=zone(g,ph),q=qRule(g,ph),r=10**(ph-g.pk);
+  const rTxt=r>=1000||r<0.001?`10^${fmtN(ph-g.pk)}`:fmtN(r>=1?r:+r.toPrecision(2));
+  $("#rRead").innerHTML=`<div><small>pH − pKa</small><span>${(ph-g.pk>=0?"+":"−")+fmtN(Math.abs(ph-g.pk))}</span></div><div><small>[base form] / [acid form]</small><span>${rTxt}</span></div><div><small>Rule of thumb</small><span>${q==null?"gray zone":fq(q)}</span></div><div><small>Exact (HH)</small><span>${fq(qExact(g,ph))}</span></div>`;
+  const forms=g.t==="acid"?["HA","A⁻"]:["HA⁺","A"];
+  const msg={below:`pH is 1 or more below the pKa, so we're on the left: the ${forms[0]} form predominates (at least 10 : 1). Charge ≈ <b>${fq(q)}</b>.`,
+    above:`pH is 1 or more above the pKa, so we're on the right: the ${forms[1]} form predominates (at least 10 : 1). Charge ≈ <b>${fq(q)}</b>.`,
+    eq:`pH = pKa: half is ${forms[0]} and half is ${forms[1]}. Charge = ½ × (${g.t==="acid"?"0":"+1"}) + ½ × (${g.t==="acid"?"−1":"0"}) = <b>${fq(q)}</b>.`,
+    gray:`Gray zone: pH is within 1 of the pKa, so the rules of thumb don't apply. We'd use Henderson–Hasselbalch instead (exact charge ${fq(qExact(g,ph))}). Exam questions always put the pH at the pKa or at least 1 away.`}[z];
+  fb($("#rNote"),z==="gray"?"no":"info",msg);
+}
+$("#rGroup").addEventListener("change",renderRules);$("#rPH").addEventListener("input",renderRules);
+// drill
+let rStats={right:0,total:0,streak:0};
+function rDrill(){const box=$("#rDrill");box.innerHTML="";const g=pick(RGROUPS);
+  if(Math.random()<0.2){const opts=["Weakly acidic: HA → A⁻ + H⁺","Weakly basic: HA⁺ → A + H⁺"];const ans=g.t==="acid"?0:1;
+    askRule(box,`Is the ${g.lab.toLowerCase()} group weakly acidic or weakly basic?`,opts,ans,`${g.lab}: weakly ${g.t==="acid"?"acidic, from HA (0) to A⁻ (−1)":"basic, from HA⁺ (+1) to A (0) with a lone pair"}. Its pKa is ${g.pk}.`,false);return;}
+  let ph;if(Math.random()<0.3)ph=g.pk;else{const offs=[-4,-3,-2.5,-2,-1.5,-1,1,1.5,2,2.5,3,4].map(o=>g.pk+o).filter(p=>p>=0&&p<=14);ph=pick(offs);}
+  const q=qRule(g,ph);const OPTS=[1,.5,0,-.5,-1];const z=zone(g,ph);
+  const why={below:`pH ${fmtN(ph)} is ${fmtN(g.pk-ph)} below the pKa (${g.pk}), so the ${g.t==="acid"?"HA":"HA⁺"} form predominates.`,above:`pH ${fmtN(ph)} is ${fmtN(ph-g.pk)} above the pKa (${g.pk}), so the ${g.t==="acid"?"A⁻":"A"} form predominates.`,eq:`pH = pKa = ${g.pk}, so it's half ${g.t==="acid"?"HA (0) and half A⁻ (−1)":"HA⁺ (+1) and half A (0)"}.`}[z];
+  askRule(box,`${g.lab} (weakly ${g.t==="acid"?"acidic":"basic"}) at pH ${fmtN(ph)}. What charge does this group carry?`,OPTS.map(fq),OPTS.indexOf(q),`${why} Charge = ${fq(q)}.`,true);}
+function askRule(box,q,opts,ans,expl,five){const ob=el("div",{class:"opts"+(five?" five":"")});const out=el("div",{"aria-live":"polite"});const next=el("button",{class:"btn",type:"button",hidden:""},"Next question");next.onclick=rDrill;
+  opts.forEach((o,j)=>{const b=el("button",{class:"opt",type:"button"},o);b.onclick=()=>{[...ob.children].forEach((x,k)=>{x.disabled=true;if(k===ans)x.classList.add("right");});const ok=j===ans;if(!ok)b.classList.add("wrong");
+    rStats.total++;if(ok){rStats.right++;rStats.streak++;if(rStats.streak>=6)mark("rules","streak");}else rStats.streak=0;renderRStats();
+    fb(out,ok?"ok":"no",`<b>${ok?"Correct.":"Not quite."}</b> ${expl}`);next.hidden=false;next.focus();};ob.append(b);});
+  box.append(el("div",{style:"display:grid;gap:12px"},el("div",{class:"qtext"},q),ob,out,el("div",{class:"row"},next)));}
+const renderRStats=()=>{$("#rStats").innerHTML=`<span>Correct ${rStats.right}/${rStats.total}</span><span>Streak ${rStats.streak} (goal: 6)</span>`;};
+renderRStats();rDrill();
+
+/* ---------- STATION 2: draw ---------- */
+const DRAWABLE=AA.filter(a=>a.c!=="P");
+let dCur=null,dStats={right:0,total:0},dSolved=0;
+const D_EX=[["Ala at pH 2.5","A",2.5],["Glu at pH 4","E",4],["Glu at pH 9.5","E",9.5]];
+D_EX.forEach(([lab,c,ph])=>$("#dEx").append(el("button",{class:"chip",type:"button",onclick:()=>newDraw(c,ph)},lab)));
+function newDraw(c,ph){const a=c?BY[c]:(Math.random()<0.75?pick(DRAWABLE.filter(x=>x.pk!=null)):pick(DRAWABLE));const gs=groupsOf(a.c);
+  const p=ph!=null?ph:examPH(gs);dCur={a,gs,ph:p,sel:gs.map(()=>null),checked:false,shown:false};
+  $("#dQ").textContent=`Draw ${a.n.toLowerCase()} (${a.c3}) at pH ${fmtN(p)} and find its net charge.`;
+  $("#dNet").value="";fb($("#dFb"));renderPick();drawMol();}
+function renderPick(){const box=$("#dPick");box.innerHTML="";const showPK=$("#dShowPK").checked;
+  dCur.gs.forEach((g,i)=>{const seg=el("div",{class:"seg",role:"group","aria-label":g.lab});
+    FORMS[g.k].forEach((f,j)=>{const b=el("button",{type:"button","aria-pressed":String(dCur.sel[i]===j),html:formHTML(g.k,j)});b.onclick=()=>{dCur.sel[i]=j;dCur.checked=false;renderPick();drawMol();};seg.append(b);});
+    let mk="";if(dCur.checked||dCur.shown){const ok=dCur.sel[i]===formIdx(g,dCur.ph);mk=ok?` <span class="mark-ok">✓</span>`:` <span class="mark-no">✗</span>`;}
+    box.append(el("div",{class:"grow"},el("div",{class:"glab",html:`${g.lab}${showPK?` · weakly ${g.t==="acid"?"acidic":"basic"}, pKa ${g.pk}`:""}${mk}`}),seg));});}
+function drawMol(){const a=dCur.a,gs=dCur.gs;const chain=a.chain;const n=chain.length;const rowH=36;const baseY=50+n*rowH;const H=baseY+58;const cx=150;
+  const CW=10.2;let s="";
+  const T=(x,y,txt,anchor="middle",cls="dt")=>`<text class="${cls}" x="${x}" y="${y}" text-anchor="${anchor}">${txt}</text>`;
+  const bw=c=>c?(c.length>1?24:15):0;
+  const badge=(x,y,c)=>{if(!c)return"";const pos=c.startsWith("+");const w=bw(c);return`<rect class="${pos?"qbg-p":"qbg-n"}" x="${x}" y="${y-12}" width="${w}" height="16" rx="8"/><text class="qb ${pos?"qb-p":"qb-n"}" x="${x+w/2}" y="${y}" text-anchor="middle">${c}</text>`;};
+  const formOf=i=>{const g=gs[i],j=dCur.sel[i];return j==null?FORMS[g.k][g.t==="acid"?2:0]:FORMS[g.k][j];};
+  // group drawn as text + superscript badge, inside a dashed box; x0 = left edge
+  const grp=(x0,yb,i)=>{const[t,c]=formOf(i);const w=t.length*CW;let o=T(x0,yb,t,"start","dt ion")+badge(x0+w+1,yb-7,c);const W=w+bw(c)+(c?3:0);o+=`<rect class="ionbox ${mk(i)}" x="${x0-6}" y="${yb-22}" width="${W+12}" height="32"/>`;return{o,W};};
+  // backbone: Cα with H below
+  s+=T(cx,baseY+6,"C")+`<line class="dl" x1="${cx}" y1="${baseY+12}" x2="${cx}" y2="${baseY+30}"/>`+T(cx,baseY+48,"H");
+  s+=`<line class="dl" x1="${cx-11}" y1="${baseY}" x2="${cx-30}" y2="${baseY}"/><line class="dl" x1="${cx+11}" y1="${baseY}" x2="${cx+30}" y2="${baseY}"/>`;
+  const iC=gs.length-1;
+  const nf=formOf(0),nW=nf[0].length*CW+bw(nf[1])+(nf[1]?3:0);s+=grp(cx-38-nW,baseY+6,0).o;
+  s+=grp(cx+38,baseY+6,iC).o;
+  // side chain, drawn upward from Cα
+  let y=baseY-36;s+=`<line class="dl" x1="${cx}" y1="${baseY-13}" x2="${cx}" y2="${y+5}"/>`;
+  const sIdx=gs.findIndex(g=>g.aa);
+  chain.forEach((seg,k)=>{if(seg==="*"){const f=formOf(sIdx);const W=f[0].length*CW+bw(f[1])+(f[1]?3:0);s+=grp(cx-f[0].length*CW/2,y,sIdx).o;}
+    else s+=T(cx,y,seg);
+    if(k<n-1)s+=`<line class="dl" x1="${cx}" y1="${y-15}" x2="${cx}" y2="${y-rowH+5}"/>`;y-=rowH;});
+  const extra=a.c==="H"?18:0;
+  if(a.c==="H")s+=`<text x="${cx}" y="${H+8}" text-anchor="middle" style="fill:var(--muted);font:500 13px var(--f-body)">Im = imidazole ring</text>`;
+  $("#dSvg").setAttribute("viewBox",`0 0 300 ${H+extra}`);
+  $("#dSvg").setAttribute("aria-label",`${a.n} structure as currently drawn`);
+  $("#dSvg").innerHTML=s;}
+function mk(i){if(!(dCur.checked||dCur.shown))return"";return dCur.sel[i]===formIdx(dCur.gs[i],dCur.ph)?"ok":"bad";}
+function solTable(gs,ph){return`<ol class="steps">${gs.slice().sort((a,b)=>a.pk-b.pk).map(g=>`<li>${g.lab}, pKa ${g.pk}: pH ${fmtN(ph)} is ${relTxt(g,ph)} → ${formWords(g,formIdx(g,ph))} → <b>${fq(qRule(g,ph))}</b></li>`).join("")}<li>Add them: net charge = <b>${fq(netRule(gs,ph))}</b></li></ol>`;}
+$("#dCheck").onclick=()=>{if(!dCur)return;if(dCur.sel.some(x=>x==null))return fb($("#dFb"),"info","Set every dashed group to a form first.");
+  const v=parseNum($("#dNet").value);if(isNaN(v))return fb($("#dFb"),"info","Type the net charge too, like +½, −1.5 or 0.");
+  dCur.checked=true;const formsOK=dCur.gs.every((g,i)=>dCur.sel[i]===formIdx(g,dCur.ph));const ans=netRule(dCur.gs,dCur.ph);const netOK=Math.abs(v-ans)<0.01;
+  dStats.total++;if(formsOK&&netOK){dStats.right++;if(!dCur.counted){dCur.counted=true;dSolved++;if(dSolved>=3)mark("draw","three");}}
+  renderPick();drawMol();renderDStats();
+  if(formsOK&&netOK)fb($("#dFb"),"ok",`<b>Correct.</b> ${dCur.a.n} at pH ${fmtN(dCur.ph)} has a net charge of ${fq(ans)}.`);
+  else fb($("#dFb"),"no",`<b>Not quite.</b> ${formsOK?"Every group is drawn correctly, so recheck the sum.":"Groups marked ✗ are in the wrong form. Compare the pH with each pKa: at least 1 below, equal, or at least 1 above."}`);};
+$("#dShow").onclick=()=>{if(!dCur)return;dCur.shown=true;dCur.sel=dCur.gs.map(g=>formIdx(g,dCur.ph));renderPick();drawMol();fb($("#dFb"),"info",`<b>Worked solution.</b>${solTable(dCur.gs,dCur.ph)}`);};
+$("#dNew").onclick=()=>newDraw();$("#dShowPK").addEventListener("change",renderPick);
+$("#dNet").addEventListener("keydown",e=>{if(e.key==="Enter")$("#dCheck").click();});
+const renderDStats=()=>{$("#dStats").innerHTML=`<span>Correct drawings ${dStats.right}/${dStats.total}</span><span>Goal: 3</span>`;};
+renderDStats();newDraw("A",2.5);
+
+/* ---------- STATION 3: peptides ---------- */
+const pSeq=$("#pSeq"),pPH=$("#pPH");
+[["AEGK",12.5],["AEGK",7],["DKH",6],["GRY",1]].forEach(([s,ph])=>$("#pEx").append(el("button",{class:"chip",type:"button",onclick:()=>{pSeq.value=s;pPH.value=ph;renderPep();}},`${s} @ ${ph}`)));
+function cleanSeq(v){const raw=v.toUpperCase().replace(/[^A-Z]/g,"");const bad=[...raw].filter(c=>!BY[c]);return{seq:[...raw].filter(c=>BY[c]).join(""),bad};}
+function renderPep(){const {seq,bad}=cleanSeq(pSeq.value);fb($("#pErr"),bad.length?"info":"",bad.length?`Ignored ${[...new Set(bad)].join(", ")}: not a standard one-letter code.`:"");
+  const ph=Math.max(0,Math.min(14,+pPH.value||0));
+  if(seq.length<2){$("#pTable").innerHTML="";$("#pRead").innerHTML="";fb($("#pNote"),"info","Type at least two residues. For single amino acids, use the Draw it station.");return;}
+  const gs=groupsOf(seq);let anyGray=false;
+  let h=`<thead><tr><th>Ionizable group</th><th>Type</th><th>pKa</th><th>pH vs pKa</th><th>Charge</th></tr></thead><tbody>`;
+  gs.forEach(g=>{const q=qRule(g,ph);if(q==null)anyGray=true;h+=`<tr><td>${g.lab}</td><td>weakly ${g.t==="acid"?"acidic":"basic"}</td><td class="num">${g.term?`<u>${g.pk}</u>`:g.pk}</td><td>${relTxt(g,ph)}</td><td class="num">${q==null?`<span class="q z">${fq(qExact(g,ph))}</span> HH`:qBadge(q)}</td></tr>`;});
+  $("#pTable").innerHTML=h+"</tbody>";
+  const net=gs.reduce((s,g)=>s+(qRule(g,ph)??qExact(g,ph)),0);
+  $("#pRead").innerHTML=`<div><small>Peptide</small><span style="font-size:14px">${seqName(seq)}</span></div><div><small>pH</small><span>${fmtN(ph)}</span></div><div><small>Net charge</small><span>${fq(net)}</span></div>`;
+  fb($("#pNote"),anyGray?"no":"info",anyGray?"At least one group is in the gray zone (within 1 of its pKa), so its charge comes from Henderson–Hasselbalch. On exams, the pH will always avoid this.":"Underlined pKas are the shifted termini: 8.5 for the N-terminus and 3.5 for the C-terminus.");}
+pSeq.addEventListener("input",renderPep);pPH.addEventListener("input",renderPep);
+// practice
+let pp=null,ppSolved=0;
+function randPeptide(){let s;do{const n=pick([3,3,4,4,5]);s=Array.from({length:n},()=>Math.random()<0.55?pick(IONIZ):pick(NOPKR)).join("");}while(![...s].some(c=>BY[c].pk!=null));return s;}
+function newPP(){const s=pp&&pp.first?"AEGK":randPeptide();const gs=groupsOf(s);const ph=pp&&pp.first?12.5:examPH(gs,0.25);pp={s,gs,ph,ans:netRule(gs,ph),solved:false};
+  const box=$("#pp");box.innerHTML="";const inp=el("input",{type:"text",inputmode:"decimal","aria-label":"Net charge",placeholder:"Net charge",size:"10",autocomplete:"off"});const out=el("div",{"aria-live":"polite"});const st=el("div",{hidden:""});
+  const chk=el("button",{class:"btn",type:"button"},"Check"),sh=el("button",{class:"btn ghost",type:"button"},"Show worked solution");
+  chk.onclick=()=>{const v=parseNum(inp.value);if(isNaN(v))return fb(out,"info","Type a number first, like −2, +½ or 1.5.");
+    if(Math.abs(v-pp.ans)<0.01){fb(out,"ok",`<b>Correct.</b> Net charge = ${fq(pp.ans)}.`);if(!pp.solved){pp.solved=true;ppSolved++;if(ppSolved>=3)mark("peptide","three");}}
+    else fb(out,"no","<b>Not quite.</b> Pencil in the N-terminus (8.5) and C-terminus (3.5), list every ionizable side chain, apply the rule to each, then add.");};
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")chk.click();});sh.onclick=()=>{st.hidden=false;};
+  st.append(el("div",{html:`<ol class="steps"><li>Write it out with the termini: N-terminus (<b>8.5</b>) on ${BY[s[0]].c3}, C-terminus (<b>3.5</b>) on ${BY[s[s.length-1]].c3}.</li>${pp.gs.map(g=>`<li>${g.lab}, pKa ${g.pk}: ${relTxt(g,ph)} → <b>${fq(qRule(g,ph))}</b></li>`).join("")}<li>Add them: net charge = <b>${fq(pp.ans)}</b></li></ol>`}));
+  box.append(el("div",{class:"q2"},`What is the net charge on ${seqName(s)} (${s}) at pH ${fmtN(ph)}?`),el("div",{class:"row"},inp,chk,sh),out,st);}
+pp={first:true};newPP();$("#ppNew").onclick=newPP;
+
+/* ---------- titration model ---------- */
+function solvePH(pks,eq){const C=1,Na=eq*C,Ka=pks.slice().sort((a,b)=>a-b).map(p=>10**-p);
+  const f=p=>{const H=10**-p;let t=[1];Ka.forEach(k=>t.push(t[t.length-1]*k/H));const S=t.reduce((a,b)=>a+b,0);let avg=0;t.forEach((v,j)=>avg+=j*v);return H+Na-1e-14/H-C*avg/S;};
+  let lo=-1,hi=15;for(let i=0;i<50;i++){const m=(lo+hi)/2;if(f(m)>0)lo=m;else hi=m;}return(lo+hi)/2;}
+function curveSVG(gs,e,opts){const n=gs.length,pks=gs.map(g=>g.pk),sorted=gs.slice().sort((a,b)=>a.pk-b.pk),P=piOf(gs);
+  const X0=52,X1=620,Y0=316,Y1=14;const xs=q=>X0+(X1-X0)*q/n,ys=p=>Y0-(Y0-Y1)*p/14;
+  let s="";for(let p=0;p<=14;p+=2)s+=`<line class="ax" x1="${X0}" x2="${X1}" y1="${ys(p)}" y2="${ys(p)}"/><text class="axl" x="${X0-8}" y="${ys(p)+4}" text-anchor="end">${p}</text>`;
+  for(let q=0;q<=n+1e-9;q+=0.5)s+=`<line class="ax" x1="${xs(q)}" x2="${xs(q)}" y1="${q%1?Y0:Y1}" y2="${Y0+5}" ${q%1?"":'stroke-dasharray="2 4"'}/><text class="axl" x="${xs(q)}" y="${Y0+19}" text-anchor="middle">${q}</text>`;
+  s+=`<text class="axl" x="${(X0+X1)/2}" y="${Y0+44}" text-anchor="middle">Equivalents of OH⁻ added</text><text class="axl" transform="translate(14 ${(Y0+Y1)/2}) rotate(-90)" text-anchor="middle">pH</text>`;
+  if(opts.labels){sorted.forEach((g,i)=>{const y=ys(solvePH(pks,i+0.5));s+=`<line class="pkaline" x1="${xs(i+0.5)}" x2="${xs(i+0.5)}" y1="${y}" y2="${Y0}"/><text class="pkalbl" x="${xs(i+0.5)+(i===n-1?-6:6)}" y="${y+(g.pk>11?18:-8)}" text-anchor="${i===n-1?"end":"start"}">pKa ${g.pk}</text>`;});
+    const piY=ys(solvePH(pks,P.nb));s+=`<line class="pimark" x1="${xs(P.nb)}" x2="${xs(P.nb)}" y1="${piY}" y2="${Y0}"/><text class="pilbl" x="${xs(P.nb)+6}" y="${piY+16}">pI ${fmtN(P.pi)}</text>`;}
+  let d="";for(let k=0;k<=300;k++){const q=n*k/300;d+=(k?"L":"M")+xs(q).toFixed(1)+" "+ys(solvePH(pks,q)).toFixed(1);}
+  s+=`<path class="curve" d="${d}"/>`;const ph=solvePH(pks,e);s+=`<circle class="marker" cx="${xs(e)}" cy="${ys(ph)}" r="7"/>`;
+  if(opts.charges){let q=P.nb;for(let i=0;i<n;i++){s+=`<text class="pkalbl" x="${xs(i)+6}" y="${Y0-8}" fill="var(--muted)" style="fill:var(--muted)">${fq(q)}</text>`;q--;}s+=`<text class="pkalbl" x="${xs(n)-6}" y="${Y0-8}" text-anchor="end" style="fill:var(--muted)">${fq(q)}</text>`;}
+  return{svg:s,ph};}
+// ideal sequential model: groups titrated in pKa order
+function idealCharges(gs,e){const sorted=gs.map((g,i)=>({g,i})).sort((a,b)=>a.g.pk-b.g.pk);const out=new Array(gs.length);sorted.forEach((o,rank)=>{const f=Math.max(0,Math.min(1,e-rank));out[o.i]={f,q:o.g.t==="base"?1-f:-f,rank};});return out;}
+
+/* ---------- STATION 4: walkthrough ---------- */
+const tSel=$("#tSel"),teq=$("#teq");
+function drawT(){const seq=tSel.value;const gs=groupsOf(seq);const n=gs.length;teq.max=n;if(+teq.value>n)teq.value=n;const e=+teq.value;
+  const {svg,ph}=curveSVG(gs,e,{labels:true,charges:true});$("#tSvg").innerHTML=svg;$("#teqv").textContent=fmtN(e);
+  const ch=idealCharges(gs,e),net=ch.reduce((s,c)=>s+c.q,0),P=piOf(gs);
+  $("#tRead").innerHTML=`<div><small>pH (from curve)</small><span>${fix(ph,1)}</span></div><div><small>Net charge</small><span>${fq(net)}</span></div><div><small>Groups titrated</small><span>${fmtN(e)} of ${n}</span></div>`;
+  let h=`<thead><tr><th>Group</th><th>pKa</th><th>Titration order</th><th>Fraction deprotonated</th><th>Charge</th></tr></thead><tbody>`;
+  gs.forEach((g,i)=>{const c=ch[i];h+=`<tr><td>${g.lab}</td><td class="num">${g.pk}</td><td class="num">${c.rank+1}</td><td class="num">${c.f===0?"0":c.f===1?"1 (done)":"½ (pH = pKa)"}</td><td class="num">${qBadge(c.q)}</td></tr>`;});
+  $("#tTable").innerHTML=h+"</tbody>";
+  const sorted=gs.slice().sort((a,b)=>a.pk-b.pk);const k=Math.floor(e),half=e-k>0.25;let note;
+  if(e===0)note=`<b>Start, very low pH.</b> Everything is protonated, so net charge = ${fq(net)}${seq.length===1&&BY[seq].pk!=null?` (${BY[seq].t==="acid"?"every amino acid with a weakly acidic side chain starts at +1":"every amino acid with a weakly basic side chain starts at +2"})`:""}.`;
+  else if(half){const g=sorted[k];note=`<b>Half-equivalence point.</b> We're halfway through titrating the ${g.lab}, so pH = its pKa (${g.pk}) and it carries ${fq(ch[gs.indexOf(g)].q)}. Net charge = ${fq(net)}.${seq==="AEGK"&&k===1?" Overlapping buffer regions pull the reading off a little, as in the video.":""}`;}
+  else if(e>=n)note=`<b>Done, very high pH.</b> Everything is deprotonated. ${n} groups needed ${n} equivalents of OH⁻. Net charge = ${fq(net)}.`;
+  else{const g=sorted[k-1];note=`<b>Equivalence point.</b> The ${g.lab} is fully titrated. Net charge = ${fq(net)}${Math.abs(net)<EPS?`: this is the <b>isoelectric point</b>, pI = (${P.lo} + ${P.hi}) / 2 = ${fmtN(P.pi)}${seq==="K"?". Notice lysine's zwitterion is near pH 10, not pH 7":""}`:""}.`;}
+  fb($("#tNote"),"info",note);}
+tSel.addEventListener("change",()=>{teq.value=0;drawT();});teq.addEventListener("input",drawT);
+
+/* ---------- STATION 4: mystery ---------- */
+const FAM={none:NOPKR.filter(c=>c!=="P"),acid4:["D","E"],C:["C"],Y:["Y"],H:["H"],K:["K"],R:["R"]};
+const famOf=c=>BY[c].pk==null?"none":c==="D"||c==="E"?"acid4":c;
+let mys=null,mSolved=0,mStats={right:0,total:0};const meq=$("#meq");
+function newMys(){mys={solved:false,tries:0};
+  if(Math.random()<0.65){// amino acid
+    const fam=pick(["none","acid4","C","Y","H","K","R","acid4","H","none"]);const c=pick(FAM[fam]);mys.type="aa";mys.c=c;mys.seq=c;
+    let opts=[c];if(c==="K"||c==="Y")opts.push(c==="K"?"Y":"K");
+    shuffle(Object.keys(FAM).filter(f=>f!==fam&&!(["K","Y"].includes(c)&&["K","Y"].includes(f)))).slice(0,4-opts.length).forEach(f=>opts.push(pick(FAM[f])));
+    mys.opts=shuffle(opts);mys.ans=mys.opts.indexOf(c);const start=BY[c].t==="base"?2:1;
+    mys.clue=(c==="K"||c==="Y"||Math.random()<0.4)?`Clue: at pH 0–1, this amino acid carries a net charge of <b>+${start}</b>.`:"";
+    mys.q="Which amino acid could have produced this curve?";}
+  else{// peptide: could it contain X?
+    const cls=shuffle(["D","E","H","K","R"]).slice(0,pick([1,2]));if(cls.includes("D")&&cls.includes("E"))cls.pop();
+    const filler=Array.from({length:pick([1,2])},()=>pick(["G","A","S","V","L"]));const s=shuffle([...cls,...filler]).join("");mys.type="pep";mys.seq=s;
+    const tgt=pick([["histidine","H",6],["lysine","K",10.5],["arginine","R",12.5],["aspartic acid","D",4]]);mys.tgt=tgt;
+    const has=groupsOf(s).some(g=>g.aa&&g.pk===tgt[2]);mys.opts=["Yes","No"];mys.ans=has?0:1;mys.clue="";
+    mys.q=`This is the titration curve of a small peptide. Could it contain ${tgt[0]}?`;}
+  meq.value=0.5;$("#mQ").textContent=mys.q;fb($("#mFb"));$("#mClue").innerHTML=mys.clue?`<div class="cluebox">${mys.clue}</div>`:"";
+  const ob=el("div",{class:mys.type==="pep"?"yn":"opts cols"});
+  mys.opts.forEach((o,j)=>{const b=el("button",{class:mys.type==="pep"?"btn ghost":"opt",type:"button"},mys.type==="aa"?BY[o].n:o);b.onclick=()=>answerMys(j,b,ob);ob.append(b);});
+  $("#mOpts").innerHTML="";$("#mOpts").append(ob);drawM();}
+function answerMys(j,b,ob){if(mys.solved)return;mys.tries++;const ok=j===mys.ans;const gs=groupsOf(mys.seq);const pks=gs.map(g=>g.pk).sort((a,b)=>a-b);
+  if(ok){mys.solved=true;mStats.total++;if(mys.tries===1)mStats.right++;mSolved++;if(mSolved>=2)mark("titration","mys");[...ob.children].forEach(x=>x.disabled=true);if(mys.type==="pep"){b.style.borderColor="var(--good)";b.style.color="var(--good)";}else b.classList.add("right");
+    let why;if(mys.type==="aa"){const a=BY[mys.c];
+      why=a.pk==null?`Only two flat regions: about 2.5 (α-COOH) and 9.5 (α-NH₃⁺). Two equivalents, two groups, no ionizable side chain.`:
+      `Flat regions at ${pks.join(", ")}. The 2.5 is the α-COOH and the 9.5 is the α-NH₃⁺, so the remaining ${a.pk} is the side chain (pKR ${a.pk}): ${a.n.toLowerCase()}.${a.c==="K"?" Tyrosine also has pKR 10.5, but its weakly acidic side chain would start at +1, not +2.":a.c==="Y"?" Lysine also has pKR 10.5, but its weakly basic side chain would start at +2, not +1.":a.c==="D"||a.c==="E"?` Asp and Glu both have pKR 4, so only one of them is offered.`:""}`;}
+    else{why=`Flat regions near ${pks.join(", ")}: 3.5 is the C-terminus and 8.5 is the N-terminus. ${mys.ans===0?`The ${mys.tgt[2]} region matches ${mys.tgt[0]}'s side chain (pKR ${mys.tgt[2]}).`:`No flat region at ${mys.tgt[2]}, so ${mys.tgt[0]} (pKR ${mys.tgt[2]}) can't be in this peptide.`} The actual sequence was ${seqName(mys.seq)}.`;}
+    fb($("#mFb"),"ok",`<b>Correct.</b> ${why}`);drawM();}
+  else{b.disabled=true;if(mys.type==="aa")b.classList.add("wrong");else b.style.borderColor="var(--bad)";fb($("#mFb"),"no",`<b>Not that one.</b> Slide to each half-equivalence point and read the pH. ${mys.type==="aa"?"Remove the 2.5 and 9.5; the leftover pKa belongs to the side chain.":`Remove 3.5 and 8.5 (the termini); what's left are side chains. Is there one at ${mys.tgt[2]}?`}`);}
+  $("#mStats").innerHTML=`<span>Solved on first try ${mStats.right}/${mStats.total}</span><span>Goal: 2 curves</span>`;}
+function drawM(){if(!mys)return newMys();const gs=groupsOf(mys.seq);meq.max=gs.length;if(+meq.value>gs.length)meq.value=gs.length;const e=+meq.value;
+  const {svg,ph}=curveSVG(gs,e,{labels:mys.solved,charges:false});$("#mSvg").innerHTML=svg;$("#meqv").textContent=fmtN(e);
+  $("#mRead").innerHTML=`<div><small>Equivalents</small><span>${fmtN(e)}</span></div><div><small>pH at this point</small><span>${fix(ph,1)}</span></div><div><small>Total equivalents</small><span>${gs.length}</span></div>`;}
+meq.addEventListener("input",drawM);$("#mNew").onclick=newMys;
+$("#mStats").innerHTML=`<span>Solved on first try 0/0</span><span>Goal: 2 curves</span>`;
+
+/* ---------- STATION 5: pI ---------- */
+const FCARDS=[{f:"pI = (pK₁ + pK₂) / 2",w:"No ionizable side chain, and tyrosine",a:"≈ (2.5 + 9.5) / 2 = 6.0"},
+ {f:"pI = (pK₁ + pKR) / 2",w:"Weakly acidic side chains: Asp, Glu, Cys",a:"Glu: (2.5 + 4) / 2 = 3.25 · Cys: 5.5"},
+ {f:"pI = (pK₂ + pKR) / 2",w:"Weakly basic side chains: His, Lys, Arg",a:"Lys: (9.5 + 10.5) / 2 = 10 · His: 7.75 · Arg: 11"}];
+FCARDS.forEach(c=>$("#fcards").append(el("div",{class:"fcard"},el("div",{class:"ff"},c.f),el("div",{class:"fw"},c.w),el("div",{class:"fa"},c.a))));
+$("#fcards").append(el("div",{class:"callout",style:"grid-column:1/-1",html:"<b>Why tyrosine is the exception:</b> its phenol pKR (10.5) is above the α-NH₃⁺ (9.5), so the α-NH₃⁺ is titrated second. The 0 form sits between pK₁ and pK₂, just like glycine."}));
+const lSeq=$("#lSeq");["G","Y","E","C","H","K","R","AEGK","KK"].forEach(s=>$("#lEx").append(el("button",{class:"chip",type:"button",onclick:()=>{lSeq.value=s;renderLadder();}},s)));
+function renderLadder(){const {seq,bad}=cleanSeq(lSeq.value);fb($("#lErr"),bad.length?"info":"",bad.length?`Ignored ${[...new Set(bad)].join(", ")}.`:"");
+  if(!seq){$("#lSvg").innerHTML="";$("#lF").textContent="Type at least one amino acid.";return;}
+  const gs=groupsOf(seq),P=piOf(gs),pks=P.pks;const X0=20,X1=620,xs=p=>X0+(X1-X0)*p/14;
+  let s="";const bounds=[0,...pks,14];let q=P.nb;
+  for(let i=0;i<bounds.length-1;i++){const a=bounds[i],b=bounds[i+1];const cls=q>0?"p":q<0?"n":"z";
+    if(q===0)s+=`<rect class="lad-z" x="${xs(a)}" y="30" width="${Math.max(2,xs(b)-xs(a))}" height="56" rx="4"/>`;
+    if(xs(b)-xs(a)>18)s+=`<text class="lad-q ${cls}" x="${(xs(a)+xs(b))/2}" y="63" text-anchor="middle">${fq(q)}</text>`;
+    else s+=`<text class="lad-q ${cls}" x="${(xs(a)+xs(b))/2}" y="${24}" text-anchor="middle">${fq(q)}</text>`;q--;}
+  pks.forEach((p,i)=>{const dup=pks.indexOf(p)!==i;s+=`<line class="pkl" x1="${xs(p)}" x2="${xs(p)}" y1="30" y2="86"/>`;if(!dup)s+=`<text class="lad-pk" x="${xs(p)}" y="${104+(i%2)*14}" text-anchor="middle">${p}</text>`;});
+  for(let p=0;p<=14;p+=2)s+=`<text class="nlm" x="${xs(p)}" y="146" text-anchor="middle">${p}</text>`;
+  s+=`<text class="nlm" x="${(X0+X1)/2}" y="164" text-anchor="middle">pH</text>`;
+  s+=`<path class="phm" d="M${xs(P.pi)} 88 l-7 12 h14 z" style="fill:var(--accent-ink)"/>`;
+  $("#lSvg").innerHTML=s;
+  const single=seq.length===1;const a=single?BY[seq]:null;
+  let fam="";if(single){fam=a.pk==null||a.c==="Y"?"pI = (pK₁ + pK₂) / 2":a.t==="acid"?"pI = (pK₁ + pKR) / 2":"pI = (pK₂ + pKR) / 2";}
+  $("#lF").innerHTML=`${single?a.n:seqName(seq)}: pKas in order ${pks.join(", ")}. Fully protonated, the charge is ${fq(P.nb)}; it drops by 1 at each pKa and is 0 between <b>${P.lo}</b> and <b>${P.hi}</b>.${P.lo===P.hi?" Both flanking pKas are the same, so we use that value.":""}<br>${single?fam+" → ":""}pI = (${P.lo} + ${P.hi}) / 2 = <b>${fmtN(P.pi)}</b>`;}
+lSeq.addEventListener("input",renderLadder);
+// practice
+let ip=null,ipSolved=0;
+const IP={
+ formula(){const c=pick([...IONIZ,"G","A","Y","Y"]);const a=BY[c];const F=["(pK₁ + pK₂) / 2","(pK₁ + pKR) / 2","(pK₂ + pKR) / 2"];const ans=a.pk==null||c==="Y"?0:a.t==="acid"?1:2;
+   return{mc:true,q:`Which formula gives the pI of ${a.n.toLowerCase()}?`,opts:F,ans,expl:ans===0?(c==="Y"?"Tyrosine is the exception: its pKR (10.5) is above pK₂ (9.5), so the 0 form sits between pK₁ and pK₂.":`${a.n} has no ionizable side chain, so only pK₁ and pK₂ matter.`):ans===1?`${a.n}'s side chain is weakly acidic. Charges: +1 → 0 (at pK₁) → −1 (at pKR ${a.pk}). The 0 form sits between pK₁ and pKR.`:`${a.n}'s side chain is weakly basic, so it starts at +2. Charges: +2 → +1 (pK₁) → 0 → −1, with the 0 form between ${a.pk<9.5?"pKR and pK₂":"pK₂ and pKR"}.`};},
+ aa(){const c=pick([...IONIZ,...IONIZ,"G","V"]);const a=BY[c];const gs=groupsOf(c),P=piOf(gs);return{q:`What is the pI of ${a.n.toLowerCase()}?`,ans:P.pi,steps:ladderSteps(gs,P)};},
+ pep(){const s=Math.random()<0.2?"AEGK":randPeptide();const gs=groupsOf(s),P=piOf(gs);return{q:`What is the pI of ${seqName(s)} (${s})?`,ans:P.pi,steps:[`Pencil in the termini: N-terminus <b>8.5</b>, C-terminus <b>3.5</b>.`,...ladderSteps(gs,P)]};}};
+function ladderSteps(gs,P){let q=P.nb;const reg=[`below ${P.pks[0]}: ${fq(q)}`];P.pks.forEach(pk=>{q--;reg.push(`above ${pk}: ${fq(q)}`);});
+  return[`pKas in order: <span class="mono">${P.pks.join(", ")}</span>`,`Fully protonated, the charge is ${fq(P.nb)}. It drops by 1 at each pKa: <span class="mono">${reg.join(" · ")}</span>`,`The 0 form sits between <b>${P.lo}</b> and <b>${P.hi}</b>`,`pI = (${P.lo} + ${P.hi}) / 2 = <b>${fmtN(P.pi)}</b>`];}
+function newIP(){const t=$("#ipType").value;const k=t==="mix"?pick(["formula","aa","aa","pep","pep"]):t;ip=IP[k]();ip.solved=false;const box=$("#ip");box.innerHTML="";const out=el("div",{"aria-live":"polite"});
+  const win=()=>{if(!ip.solved){ip.solved=true;ipSolved++;if(ipSolved>=3)mark("pi","three");}};
+  if(ip.mc){const ob=el("div",{class:"opts"});ip.opts.forEach((o,j)=>{const b=el("button",{class:"opt mono",type:"button"},"pI = "+o);b.onclick=()=>{[...ob.children].forEach((x,k)=>{x.disabled=true;if(k===ip.ans)x.classList.add("right");});const ok=j===ip.ans;if(!ok)b.classList.add("wrong");else win();fb(out,ok?"ok":"no",`<b>${ok?"Correct.":"Not quite."}</b> ${ip.expl}`);};ob.append(b);});
+    box.append(el("div",{class:"q2"},ip.q),ob,out);return;}
+  const inp=el("input",{type:"text",inputmode:"decimal","aria-label":"pI",placeholder:"pI",size:"8",autocomplete:"off"});const st=el("div",{hidden:""});
+  const chk=el("button",{class:"btn",type:"button"},"Check"),sh=el("button",{class:"btn ghost",type:"button"},"Show worked solution");
+  chk.onclick=()=>{const v=parseNum(inp.value);if(isNaN(v))return fb(out,"info","Type a number first, like 6.25.");
+    if(Math.abs(v-ip.ans)<=0.051){fb(out,"ok",`<b>Correct.</b> pI = ${fmtN(ip.ans)}.`);win();}else fb(out,"no","<b>Not quite.</b> Find the 0 form on the charge ladder and average the two pKas on either side of it.");};
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")chk.click();});sh.onclick=()=>{st.hidden=false;};
+  st.append(el("ol",{class:"steps",html:ip.steps.map(s=>`<li>${s}</li>`).join("")}));
+  box.append(el("div",{class:"q2"},ip.q),el("div",{class:"row"},inp,chk,sh),out,st);}
+$("#ipNew").onclick=newIP;$("#ipType").addEventListener("change",newIP);newIP();
+
+/* ---------- CHECKPOINT ---------- */
+const Q=[
+ {q:"What is the net charge on alanine at pH 2.5?",o:["+½","+1","0","−½"],a:0,e:"α-COOH: pH = pKa (2.5), so −½. α-NH₃⁺: pH is far below 9.5, so +1. Net = +½.",s:"draw"},
+ {q:"What is the net charge on glutamic acid at pH 9.5?",o:["−1½","−½","−1","−2"],a:0,e:"α-COOH (2.5) and side-chain COOH (4) are both well below 9.5: −1 each. α-NH₃⁺: pH = pKa, so +½. Net = −1½.",s:"draw"},
+ {q:"What is the net charge on glutamic acid at pH 4?",o:["−½","0","+½","−1"],a:0,e:"α-COOH: 4 is 1.5 above 2.5 → −1. Side-chain COOH: pH = pKa → −½. α-NH₃⁺: far below 9.5 → +1. Net = −½.",s:"draw"},
+ {q:"What is the net charge on the tetrapeptide Ala–Glu–Gly–Lys at pH 12.5?",o:["−2","−1","0","−1½"],a:0,e:"C-terminus (3.5) −1, Glu side chain (4) −1, N-terminus (8.5) 0, Lys side chain (10.5) 0. Net = −2.",s:"peptide"},
+ {q:"In a polypeptide, what pKas do we use for the free N-terminal α-NH₃⁺ and C-terminal α-COOH?",o:["8.5 and 3.5","9.5 and 2.5","10.5 and 2.5","8.5 and 2.5"],a:0,e:"Next to an amide instead of the other α-group, the N-terminus drops from 9.5 to 8.5 and the C-terminus rises from 2.5 to 3.5.",s:"peptide"},
+ {q:"At a very acidic pH (about 0–1), an amino acid with a weakly basic side chain has a net charge of…",o:["+2","+1","0","+3"],a:0,e:"Everything is protonated: α-NH₃⁺ (+1), side chain HA⁺ (+1), α-COOH (0). Weakly acidic side chains start at +1 instead, because their HA form is neutral.",s:"titration"},
+ {q:"A titration curve has flat regions at about pH 2.5, 4 and 9.5. Which of these could it be?",o:["Glutamic acid","Lysine","Tyrosine","Histidine"],a:0,e:"2.5 is the α-COOH and 9.5 is the α-NH₃⁺, so the side chain's pKR is 4: Asp or Glu. Asp isn't offered, so Glu.",s:"titration"},
+ {q:"A curve has flat regions at 2.5, 9.5 and 10.5, and the amino acid's net charge at pH 1 is +2. It is…",o:["Lysine","Tyrosine","Arginine","Cysteine"],a:0,e:"Lys and Tyr both have pKR 10.5. Only a weakly basic side chain (Lys) gives +2 at very low pH; Tyr would be +1.",s:"titration"},
+ {q:"For glycine, what is the net charge after 1.5 equivalents of OH⁻?",o:["−½","+½","0","−1"],a:0,e:"Each half-equivalent lowers the charge by ½: +1 → +½ → 0 → −½ → −1. At 1.5 equivalents, pH = pK₂ = 9.5 and the charge is −½.",s:"titration"},
+ {q:"A peptide's titration curve shows flat regions near 3.5, 4, 8.5 and 10.5. Can it contain histidine?",o:["No: there's no flat region near 6","Yes: histidine is always present","Yes: the 4 could be histidine","Can't tell from a curve"],a:0,e:"Histidine's imidazole (pKR 6) would add a flat region near pH 6. The others are the C-terminus (3.5), Asp/Glu (4), N-terminus (8.5) and Lys/Tyr (10.5).",s:"titration"},
+ {q:"What is the pI of tyrosine?",o:["6.0","10.0","6.5","8.0"],a:0,e:"Tyrosine is the exception: pI = (pK₁ + pK₂) / 2 = (2.5 + 9.5) / 2 = 6.0, because its phenol (10.5) is titrated after the α-NH₃⁺.",s:"pi"},
+ {q:"What is the pI of histidine?",o:["7.75","4.25","10.0","6.0"],a:0,e:"Weakly basic side chain: pI = (pK₂ + pKR) / 2 = (9.5 + 6) / 2 = 7.75.",s:"pi"},
+ {q:"What is the pI of Ala–Glu–Gly–Lys?",o:["6.25","6.0","7.0","3.75"],a:0,e:"pKas 3.5, 4, 8.5, 10.5. Charges +2 → +1 → 0 → −1 → −2. The 0 form sits between 4 and 8.5: (4 + 8.5) / 2 = 6.25.",s:"pi"},
+ {q:"What is the net charge on lysine at pH 7?",o:["+1","0","+2","−1"],a:0,e:"α-COOH −1, α-NH₃⁺ +1, side-chain NH₃⁺ +1. Net +1. Lysine's zwitterion (net 0) occurs between pH 9.5 and 10.5.",s:"draw"},
+ {q:"Which of these groups is weakly BASIC?",o:["Histidine imidazole","Cysteine thiol","Tyrosine phenol","Asparagine amide"],a:0,e:"The imidazole N has a lone pair and goes HA⁺ → A. Thiol and phenol are weakly acidic (HA → A⁻), and an amide N isn't basic.",s:"rules"}];
+let qi=0,qScore=0,qMissed=[],qOrder=[];
+function quizStart(){qOrder=shuffle(Q.map((_,i)=>i));qi=0;qScore=0;qMissed=[];renderQ();}
+function renderQ(){const quiz=$("#quiz");quiz.innerHTML="";const names=Object.fromEntries(STATIONS);
+  if(qi>=Q.length){mark("checkpoint","quiz");const box=el("div",{class:"qcard"},el("div",{class:"qmeta"},"Checkpoint complete"),el("div",{class:"score"},`${qScore} / ${Q.length}`),el("p",{},qScore===Q.length?"Every question correct. We're ready for this material on Exam 1.":qScore>=Q.length*0.8?"Strong work. Review the ones you missed below.":"Revisit the stations below, then try again."));
+    if(qMissed.length){const ul=el("ul",{class:"review"});qMissed.forEach(i=>{ul.append(el("li",{},Q[i].q.length>90?Q[i].q.slice(0,88)+"…":Q[i].q,el("button",{class:"btn ghost",type:"button",style:"padding:4px 8px;margin-left:6px",onclick:()=>show(Q[i].s,true)},"Go to "+names[Q[i].s])));});box.append(el("h3",{},"Review"),ul);}
+    box.append(el("div",{class:"row"},el("button",{class:"btn",type:"button",onclick:quizStart},"Retake checkpoint")));quiz.append(box);return;}
+  const it=Q[qOrder[qi]];const order=shuffle(it.o.map((_,i)=>i));const ans=order.indexOf(it.a);
+  const opts=el("div",{class:"opts"}),out=el("div",{"aria-live":"polite"}),next=el("button",{class:"btn",type:"button",hidden:""},qi===Q.length-1?"See results":"Next question");next.onclick=()=>{qi++;renderQ();};
+  order.forEach((oi,j)=>{const b=el("button",{class:"opt",type:"button"},it.o[oi]);b.onclick=()=>{[...opts.children].forEach((x,k)=>{x.disabled=true;if(k===ans)x.classList.add("right");});
+    if(j===ans){qScore++;fb(out,"ok","<b>Correct.</b> "+it.e);}else{b.classList.add("wrong");qMissed.push(qOrder[qi]);fb(out,"no","<b>Not quite.</b> "+it.e);}next.hidden=false;next.focus();};opts.append(b);});
+  quiz.append(el("div",{class:"qcard"},el("div",{class:"bar"},el("i",{style:`width:${qi/Q.length*100}%`})),el("div",{class:"qmeta"},`Question ${qi+1} of ${Q.length} · Score ${qScore}`),el("div",{class:"qtext"},it.q),opts,out,el("div",{class:"row"},next)));}
+quizStart();
+
+renderProg();
+const start=(location.hash||"").slice(1);
+show(STATIONS.some(s=>s[0]===start)?start:"rules",false);
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(STATIONS.some(s=>s[0]===h))show(h,false);});
+window.__test={groupsOf,netRule,piOf,qRule,zone,examPH,solvePH,idealCharges,fq,parseNum,BY};
+})();
+</script>
+
+</body>
+</html>
